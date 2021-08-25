@@ -116,4 +116,26 @@ Incorrecta porque cuando $a \geq 0$, la implicación $a < 0 \rightarrow result =
 
 Correcta.
 
+\subsection{Ejercicio 5}
+
+\subsubsection{Pregunta A}
+
+Si recibe $x = 3$ devuelve $result = 9$, lo cual hace verdadera la post condición pues $9 > 3$.
+
+\subsubsection{Pregunta B}
+
+\begin{itemize}
+    \item $x = 0.5 \rightarrow result = 0.5^2 = 0.25 \ngtr 0.5$
+    \item $x = 1 \rightarrow result = 1^2 = 1 \ngtr 1$
+    \item $x = -0.2 \rightarrow result = (-0.2)^2 = 0.04 > -0.2$
+    \item $x = -7 \rightarrow result = (-7)^2 = 49 > -7$
+\end{itemize}
+
+\subsubsection{Pregunta C}
+
+\begin{proc}{unoMasGrande}{\In x: \float, \Out result: \float}{}
+    \pre{x < 0 \lor x > 1}
+    \post{result > x}
+\end{proc}
+
 \end{document}
