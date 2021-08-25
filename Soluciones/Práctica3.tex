@@ -90,4 +90,30 @@ $(\exists s: \TLista{\ent})( (\forall x: \ent)( \#apariciones(x, s) \leq \#apari
 
 $indiceDelPrimerMaximo$ y $indiceDelMaximo$ tienen necesariamente la misma salida cuando no hay valores repetidos en la secuencia $l$. En estos casos, sería cuando $l = \langle 1, 2, 3, 4 \rangle$.
 
+\subsection{Ejercicio 4}
+
+\subsubsection{Pregunta A}
+
+Incorrecta porque las 2 expresiones deberían estar unidas con un $\lor$, ya que sino es imposible que se cumplan ambas al mismo tiempo (pues piden $a < 0$ y también $a \geq 0$).
+
+\subsubsection{Pregunta B}
+
+Incorrecta porque la post condición no contempla el caso cuando $a = 0$.
+
+\subsubsection{Pregunta C}
+
+Correcta.
+
+\subsubsection{Pregunta D}
+
+Correcta.
+
+\subsubsection{Pregunta E}
+
+Incorrecta porque cuando $a \geq 0$, la implicación $a < 0 \rightarrow result = 2 * b$ resulta $True$ pues no se cumple el antecedente. Y luego como las 2 implicaciones están unidas con un $\lor$, este $True$ ya hace que toda la post condición sea $True$ sin importar si efectivamente $result = b - 1$ como debería ser según la especificación. Pasa lo mismo de forma análoga cuando $a < 0$.
+
+\subsubsection{Pregunta F}
+
+Correcta.
+
 \end{document}
