@@ -124,12 +124,13 @@ Si recibe $x = 3$ devuelve $result = 9$, lo cual hace verdadera la post condici�
 
 \subsubsection{Pregunta B}
 
-\begin{itemize}
-    \item $x = 0.5 \rightarrow result = 0.5^2 = 0.25 \ngtr 0.5$
-    \item $x = 1 \rightarrow result = 1^2 = 1 \ngtr 1$
-    \item $x = -0.2 \rightarrow result = (-0.2)^2 = 0.04 > -0.2$
-    \item $x = -7 \rightarrow result = (-7)^2 = 49 > -7$
-\end{itemize}
+$x = 0.5 \rightarrow result = 0.5^2 = 0.25 \ngtr 0.5$
+
+$x = 1 \rightarrow result = 1^2 = 1 \ngtr 1$
+
+$x = -0.2 \rightarrow result = (-0.2)^2 = 0.04 > -0.2$
+
+$x = -7 \rightarrow result = (-7)^2 = 49 > -7$
 
 \subsubsection{Pregunta C}
 
@@ -137,5 +138,38 @@ Si recibe $x = 3$ devuelve $result = 9$, lo cual hace verdadera la post condici�
     \pre{x < 0 \lor x > 1}
     \post{result > x}
 \end{proc}
+
+\subsection{Ejercicio 6}
+
+\subsubsection{Pregunta A}
+
+$P3 > P1 > P2$
+
+\subsubsection{Pregunta B}
+
+$Q3 > Q1 > Q2$
+
+\subsubsection{Pregunta C}
+
+Programa 1: $r := x * x$
+
+Programa 2: $r := x * x + 1$
+
+\subsubsection{Pregunta D}
+
+\begin{enumerate}[a)]
+    \item Cumple porque la nueva pre condición (P3) es más fuerte que la pre condición original (P1).
+    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1).
+    \item Cumple porque la nueva post condición (Q2) es más débil que la post condición original (Q1).
+    \item No cumple porque la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
+    \item Cumple porque la nueva pre condición (P3) es más fuerte que la pre condición original (P1) y la nueva post condición (Q2) es más débil que la post condición original (Q1).
+    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1).
+    \item No cumple porque la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
+    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1) y además la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
+\end{enumerate}
+
+\subsubsection{Pregunta E}
+
+Dado un algoritmo que cumple con una especificación, se puede reemplazar dicha especificación por otra y tener garantía que el algoritmo sigue cumpliendo si la nueva pre condición es más fuerte que la original y/o la nueva post condición es más débil que la original.
 
 \end{document}
