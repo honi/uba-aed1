@@ -298,4 +298,30 @@ Sí, debería ser una entrada válida pero no lo es en la especificación dada, 
 
 La precondición original es más fuerte pues $m \neq 0 \rightarrow True$ es una tautología.
 
+\subsection{Ejercicio 11}
+
+\subsubsection{Pregunta A}
+
+A priori la especificación solo indica duplicar los valores en las posiciones impares, pero no dice nada explícito sobre qué hacer con los valores en las posiciones pares.
+
+Si solo consideramos el requerimiento de duplicar los valores en las posiciones impares, entonces el resultado sería correcto.
+
+Si además suponemos que se deben mantener intactos los valores en las posiciones pares, entonces el resultado no sería correcto.
+
+Por eso, honrando al Zen de Python, explícito es mejor que implícito.
+
+\subsubsection{Pregunta B}
+
+Sí, satisface la postcondición.
+
+\subsubsection{Pregunta C}
+
+Asumo que ``el resultado esperado`` es que los valores en las posiciones pares sean exactamente los mismos valores de la secuencia de entrada $l$, además de duplicar los valores en las posiciones impares.
+
+Esto ya lo implementé en el ejercicio 9.E.
+
+\subsubsection{Pregunta D}
+
+La nueva postcondición es más fuerte.
+
 \end{document}
