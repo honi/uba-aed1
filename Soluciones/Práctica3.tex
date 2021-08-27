@@ -4,10 +4,12 @@
 \usepackage{hyperref}
 
 \decimalpoint
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
 \setlength{\parindent}{0em}
 \setlength{\parskip}{0.5em}
-\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
 \setcounter{tocdepth}{2}
+\setcounter{section}{2}
+\renewcommand{\thesubsubsection}{\thesubsection.\Alph{subsubsection}}
 
 \begin{document}
 
@@ -274,5 +276,26 @@ Dado un número entero, listar todos sus divisores positivos (sin duplicados).
     \pre{True}
     \post{(\forall k: \ent)((k > 0 \land n \bmod k = 0 \leftrightarrow k \in r) \land (\#apariciones(r, k) \leq 1))}
 \end{proc}
+
+\subsection{Ejercicio 10}
+
+\subsubsection{Pregunta A}
+
+Tiene sentido la pregunta y la respuesta es que no, $4$ no es múltiplo de $0$ pues $\nexists n \in \ent \mid 4 = 0 * n$.
+
+\subsubsection{Pregunta B}
+
+Sí, debería ser una entrada válida pero no lo es en la especificación dada, pues la precondición pide $m \neq 0$.
+
+\subsubsection{Pregunta C}
+
+\begin{proc}{esMultiplo]}{\In n, m: \ent, \Out result: \bool}{}
+    \pre{True}
+    \post{result = \IfThenElse{m = 0}{n = 0}{n \bmod m = 0}}
+\end{proc}
+
+\subsubsection{Pregunta D}
+
+La precondición original es más fuerte pues $m \neq 0 \rightarrow True$ es una tautología.
 
 \end{document}
