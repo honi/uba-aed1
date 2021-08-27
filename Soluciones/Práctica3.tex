@@ -213,4 +213,60 @@ Por otro lado, $Post_{n-esimo1}$ nos dice que $result \in l $ y además que est�
 
 Al revés no funciona porque $Pre_{n-esimo2}$ solo garantiza que los elementos de la secuencia $l$ sean distintos entre sí, pero eso no implica que la secuencia esté ordenada. Por ejemplo $\langle 1,3,2 \rangle$ satisface $Pre_{n-esimo2}$ pero no $Pre_{n-esimo1}$.
 
+\subsection{Ejercicio 9}
+
+\subsubsection{Pregunta A}
+
+Dado un número entero, decidir si es par.
+
+\begin{proc}{esPar}{\In n: \ent, \Out r: \bool}{}
+    \pre{True}
+    \post{r = True \leftrightarrow n \bmod 2 = 0}
+\end{proc}
+
+\subsubsection{Pregunta B}
+
+Dado un entero $n$ y uno $m$, decidir si $n$ es un múltiplo de $m$.
+
+\begin{proc}{esMúltiplo}{\In n: \ent, \In m: \ent, \Out r: \bool}{}
+    \pre{True}
+    \post{r = True \leftrightarrow n \bmod m = 0}
+\end{proc}
+
+\subsubsection{Pregunta C}
+
+Dado un número real, devolver su inverso multiplicativo.
+
+\begin{proc}{inversoMultiplicativo}{\In x: \float, \Out r: \float}{}
+    \pre{x \neq 0}
+    \post{r = 1 / x}
+\end{proc}
+
+\subsubsection{Pregunta D}
+
+Dada una secuencia de caracteres, obtener de ella solo los que son numéricos (con todas sus apariciones sin importar el orden de aparición).
+
+\begin{proc}{subseqDeNumeros}{\In s: \TLista{Char}, \Out r: \TLista{Char}}{}
+    \pre{True}
+    \post{(\forall c: Char)(\#apariciones(r, c) = \IfThenElse{`0` \leq c \leq `9`}{\#apariciones(s, c)}{0})}
+\end{proc}
+
+\subsubsection{Pregunta E}
+
+Dada una secuencia de reales, devolver la secuencia que resulta de duplicar sus valores en las posiciones impares.
+
+\begin{proc}{duplicarPosicionesImpares}{\In s: \TLista{\float}, \Out r: \TLista{\float}}{}
+    \pre{True}
+    \post{|r| = |s| \land (\forall i: \ent)(0 \leq i < |r| \implicaLuego r[i] = \IfThenElse{i \bmod 2 = 0}{s[i]}{s[i] * 2})}
+\end{proc}
+
+\subsubsection{Pregunta F}
+
+Dado un número entero, listar todos sus divisores positivos (sin duplicados).
+
+\begin{proc}{divisoresPositivos}{\In n: \ent, \Out r: \TLista{\ent}}{}
+    \pre{True}
+    \post{(\forall k: \ent)((k > 0 \land n \bmod k = 0 \leftrightarrow k \in r) \land (\#apariciones(r, k) \leq 1))}
+\end{proc}
+
 \end{document}
