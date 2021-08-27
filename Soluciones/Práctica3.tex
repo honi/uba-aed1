@@ -203,13 +203,20 @@ Por lo tanto vale la precondición de $p2$.
 
 \subsubsection{Pregunta B}
 
-En esencia lo que me piden es probar que $Post_{p2} \rightarrow Post_{p1} \equiv (result = [x^n] \rightarrow x^n - 1 < result \leq x^n)$.
+En esencia lo que nos piden es probar que $Post_{p2} \rightarrow Post_{p1} \equiv (result = \lfloor x^n \rfloor \rightarrow x^n - 1 < result \leq x^n)$.
 
-Esto depende del algoritmo usado para calcular la parte entera de $x^n$. Si se usa la función \href{https://es.wikipedia.org/wiki/Funciones_de_parte_entera#Funci%C3%B3n_techo}{techo}, entonces la implicación vale pues $Post_{p2}$ es literalmente la definición de esa función. Pero si se usa otro algoritmo, por ejemplo la función \href{https://es.wikipedia.org/wiki/Funciones_de_parte_entera#Funci%C3%B3n_piso/suelo}{piso}, entonces la implicación no siempre vale.
+El algoritmo usado para calcular la parte entera de $x^n$ es la función \href{https://es.wikipedia.org/wiki/Funciones_de_parte_entera#Funci%C3%B3n_piso/suelo}{piso} (notar las patitas en la parte inferior de las barritas), por lo tanto:
+\begin{flalign*}
+result = \lfloor x^n \rfloor
+&\leftrightarrow result \leq x^n < result + 1 &&\\
+&\leftrightarrow result \leq x^n \land x^n < result + 1 &&\\
+&\leftrightarrow result \leq x^n \land x^n - 1 < result &&\\
+&\leftrightarrow x^n - 1 < result \leq x^n
+\end{flalign*}
 
 \subsubsection{Pregunta C}
 
-No necesariamente, depende del algoritmo usado para calcular la parte entera de $x^n$.
+No, porque $Pre_{p2}$ solo asegura $x \neq 0$ cuando $n \leq 0$. Por lo tanto, para $n > 0$ no podemos garantizar que se cumpla $x \neq 0$ para satisfacer $Pre_{p1}$.
 
 \subsection{Ejercicio 8}
 
