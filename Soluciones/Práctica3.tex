@@ -324,4 +324,11 @@ Esto ya lo implementé en el ejercicio 9.E.
 
 La nueva postcondición es más fuerte.
 
+\subsection{Ejercicio 12}
+
+\begin{proc}{enteroABinario}{\In n: \ent, \Out r: \TLista{\ent}}{}
+    \pre{True}
+    \post{(n = \sum_{i=0}^{|r|-1} r[|r| - 1 - i] * 2^i) \land (\forall i: \ent)(0 \leq i < |r| \implicaLuego (r[i] = 0 \lor r[i] = 1))}
+\end{proc}
+
 \end{document}
