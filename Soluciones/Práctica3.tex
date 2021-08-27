@@ -27,7 +27,7 @@
 
 \subsubsection{Pregunta A}
 
-El problema es que la post condición se puede indefinir si result está fuera del rango de la secuenca. Y eso no puede suceder nunca, las pre y post condiciones solo pueden ser verdaderas o falsas, nunca indefinidas.
+El problema es que la postcondición se puede indefinir si result está fuera del rango de la secuenca. Y eso no puede suceder nunca, las pre y post condiciones solo pueden ser verdaderas o falsas, nunca indefinidas.
 
 \begin{proc}{buscar}{\In l: \TLista{\float}, \In elem: \float, \Out result: \ent}{}
     \pre{elem \in l}
@@ -45,7 +45,7 @@ El problema es que se indefine al indexar $l[i-1]$ cuando $i=0$. Como queremos v
 
 \subsubsection{Pregunta C}
 
-El problema es que en la post condición se pide $y \neq x$ pero en el contexto de esta especificación, $x$ no está definido. En cambio, lo que habría que pedir es que $y \neq result$ o más simple aún, quitar esa condición y pedir $y \geq result$. A su vez, también falta especificar que $result \in l$ para garantizar que $result$ realmente sea un elemento de la secuencia.
+El problema es que en la postcondición se pide $y \neq x$ pero en el contexto de esta especificación, $x$ no está definido. En cambio, lo que habría que pedir es que $y \neq result$ o más simple aún, quitar esa condición y pedir $y \geq result$. A su vez, también falta especificar que $result \in l$ para garantizar que $result$ realmente sea un elemento de la secuencia.
 
 \begin{proc}{minimo}{\In l: \TLista{\ent}, \Out result: \ent}{}
     \pre{True}
@@ -56,11 +56,11 @@ El problema es que en la post condición se pide $y \neq x$ pero en el contexto 
 
 \subsubsection{Pregunta A}
 
-Por ejemplo $l = \langle 1 \rangle$, $suma = 2$. Cumplen la pre condición que es simplemente $True$ (o sea, cualquiera cosa cumple la pre condición). Pero no existe forma de cumplir con la post condición ya que no hay suficientes elementos en $l$ para que sumados den $2$.
+Por ejemplo $l = \langle 1 \rangle$, $suma = 2$. Cumplen la precondición que es simplemente $True$ (o sea, cualquiera cosa cumple la precondición). Pero no existe forma de cumplir con la postcondición ya que no hay suficientes elementos en $l$ para que sumados den $2$.
 
 \subsubsection{Pregunta B}
 
-Sigue siendo inválida porque solo restringe el valor máximo y mínimo que puede tener $suma$ pero no garantiza que efectivamente existan elementos en $l$ que sumados den $suma$. Por ejemplo $l = \langle 1, 3 \rangle$, $suma = 2$. Con estos valores se cumple la pre condición: $min\_suma(l) \leq suma \leq max\_suma(l) \leftrightarrow 0 \leq 2 \leq 3$ pero no existen elementos en $l$ que sumados den exactamente $2$.
+Sigue siendo inválida porque solo restringe el valor máximo y mínimo que puede tener $suma$ pero no garantiza que efectivamente existan elementos en $l$ que sumados den $suma$. Por ejemplo $l = \langle 1, 3 \rangle$, $suma = 2$. Con estos valores se cumple la precondición: $min\_suma(l) \leq suma \leq max\_suma(l) \leftrightarrow 0 \leq 2 \leq 3$ pero no existen elementos en $l$ que sumados den exactamente $2$.
 
 \subsubsection{Pregunta C}
 
@@ -104,7 +104,7 @@ Incorrecta porque las 2 expresiones deberían estar unidas con un $\lor$, ya que
 
 \subsubsection{Pregunta B}
 
-Incorrecta porque la post condición no contempla el caso cuando $a = 0$.
+Incorrecta porque la postcondición no contempla el caso cuando $a = 0$.
 
 \subsubsection{Pregunta C}
 
@@ -116,7 +116,7 @@ Correcta.
 
 \subsubsection{Pregunta E}
 
-Incorrecta porque cuando $a \geq 0$, la implicación $a < 0 \rightarrow result = 2 * b$ resulta $True$ pues no se cumple el antecedente. Y luego como las 2 implicaciones están unidas con un $\lor$, este $True$ ya hace que toda la post condición sea $True$ sin importar si efectivamente $result = b - 1$ como debería ser según la especificación. Pasa lo mismo de forma análoga cuando $a < 0$.
+Incorrecta porque cuando $a \geq 0$, la implicación $a < 0 \rightarrow result = 2 * b$ resulta $True$ pues no se cumple el antecedente. Y luego como las 2 implicaciones están unidas con un $\lor$, este $True$ ya hace que toda la postcondición sea $True$ sin importar si efectivamente $result = b - 1$ como debería ser según la especificación. Pasa lo mismo de forma análoga cuando $a < 0$.
 
 \subsubsection{Pregunta F}
 
@@ -126,7 +126,7 @@ Correcta.
 
 \subsubsection{Pregunta A}
 
-Si recibe $x = 3$ devuelve $result = 9$, lo cual hace verdadera la post condición pues $9 > 3$.
+Si recibe $x = 3$ devuelve $result = 9$, lo cual hace verdadera la postcondición pues $9 > 3$.
 
 \subsubsection{Pregunta B}
 
@@ -164,34 +164,34 @@ Programa 2: $r := x * x + 1$
 \subsubsection{Pregunta D}
 
 \begin{enumerate}[a)]
-    \item Cumple porque la nueva pre condición (P3) es más fuerte que la pre condición original (P1).
-    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1).
-    \item Cumple porque la nueva post condición (Q2) es más débil que la post condición original (Q1).
-    \item No cumple porque la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
-    \item Cumple porque la nueva pre condición (P3) es más fuerte que la pre condición original (P1) y la nueva post condición (Q2) es más débil que la post condición original (Q1).
-    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1).
-    \item No cumple porque la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
-    \item No cumple porque la nueva pre condición (P2) es más débil que la pre condición original (P1) y además la nueva post condición (Q3) es más fuerte que la post condición original (Q1).
+    \item Cumple porque la nueva precondición (P3) es más fuerte que la precondición original (P1).
+    \item No cumple porque la nueva precondición (P2) es más débil que la precondición original (P1).
+    \item Cumple porque la nueva postcondición (Q2) es más débil que la postcondición original (Q1).
+    \item No cumple porque la nueva postcondición (Q3) es más fuerte que la postcondición original (Q1).
+    \item Cumple porque la nueva precondición (P3) es más fuerte que la precondición original (P1) y la nueva postcondición (Q2) es más débil que la postcondición original (Q1).
+    \item No cumple porque la nueva precondición (P2) es más débil que la precondición original (P1).
+    \item No cumple porque la nueva postcondición (Q3) es más fuerte que la postcondición original (Q1).
+    \item No cumple porque la nueva precondición (P2) es más débil que la precondición original (P1) y además la nueva postcondición (Q3) es más fuerte que la postcondición original (Q1).
 \end{enumerate}
 
 \subsubsection{Pregunta E}
 
-Dado un algoritmo que cumple con una especificación, se puede reemplazar dicha especificación por otra y tener garantía que el algoritmo sigue cumpliendo si la nueva pre condición es más fuerte que la original y/o la nueva post condición es más débil que la original.
+Dado un algoritmo que cumple con una especificación, se puede reemplazar dicha especificación por otra y tener garantía que el algoritmo sigue cumpliendo si la nueva precondición es más fuerte que la original y/o la nueva postcondición es más débil que la original.
 
 \subsection{Ejercicio 7}
 
 \subsubsection{Pregunta A}
 
-Sabiendo que vale la pre condición de $p1$ se puede afirmar que $x \neq 0$.
+Sabiendo que vale la precondición de $p1$ se puede afirmar que $x \neq 0$.
 
-Luego, se puede dividir en 2 casos para ver cuándo vale la pre condición de $p2$:
+Luego, se puede dividir en 2 casos para ver cuándo vale la precondición de $p2$:
 
 \begin{enumerate}[1)]
     \item Si $n > 0$ el antecedente de la implicación es falso y así la implicación resulta verdadera, sin importar el valor de $x$.
-    \item Si $n \leq 0$ la implicación resulta verdadera si $x \neq 0$. Esto vale pues sabemos que se cumple la pre condición de $p1$.
+    \item Si $n \leq 0$ la implicación resulta verdadera si $x \neq 0$. Esto vale pues sabemos que se cumple la precondición de $p1$.
 \end{enumerate}
 
-Por lo tanto vale la pre condición de $p2$.
+Por lo tanto vale la precondición de $p2$.
 
 {\em Nota: Me parece poco formal esta "demostración".}
 
