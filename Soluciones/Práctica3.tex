@@ -201,8 +201,6 @@ Luego, se puede dividir en 2 casos para ver cuándo vale la precondición de $p2
 
 Por lo tanto vale la precondición de $p2$.
 
-{\em Nota: Me parece poco formal esta "demostración".}
-
 \subsubsection{Pregunta B}
 
 En esencia lo que me piden es probar que $Post_{p2} \rightarrow Post_{p1} \equiv (result = [x^n] \rightarrow x^n - 1 < result \leq x^n)$.
@@ -330,5 +328,23 @@ La nueva postcondición es más fuerte.
     \pre{True}
     \post{(n = \sum_{i=0}^{|r|-1} r[|r| - 1 - i] * 2^i) \land (\forall i: \ent)(0 \leq i < |r| \implicaLuego (r[i] = 0 \lor r[i] = 1))}
 \end{proc}
+
+\subsection{Ejercicio 13}
+
+Repaso:
+
+\begin{enumerate}[1)]
+    \item Sobreespecificado: postcondición mas restrictiva de lo necesario (excluye resultados válidos).
+    \item Subespecificado: precondición mas restrictiva de lo necesario (excluye entradas válidas) o postcondición muy débil (incluye resultados inválidos).
+\end{enumerate}
+
+Entonces, respecto al ejercicio 8:
+
+\begin{enumerate}[1)]
+    \item n-esimo1 está subespecificado pues la precondición pide que la secuencia esté ordenada cuando eso no es realmente relevante al problema en cuestión, excluyendo así entradas válidas para el problema.
+    \item n-esimo2 está sobreespecificado pues la postcondición implica que la secuencia está ordenada. Además eso tiene otro problema ya que la precondición no garantiza que la secuencia esté ordenada.
+\end{enumerate}
+
+{\em Nota: Verificar esta respuesta, no estoy seguro.}
 
 \end{document}
