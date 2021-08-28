@@ -354,4 +354,88 @@ Entonces, respecto al ejercicio 8:
 
 {\em Nota: Verificar esta respuesta, no estoy seguro.}
 
+\subsection{Ejercicio 14}
+
+\subsubsection{Pregunta A}
+
+Dado un número entero positivo, obtener la suma de sus factores primos.
+
+\pred{esPrimo}{n: \ent}{
+    (\forall k: \ent)(1 < k < n \implicaLuego n \bmod k \neq 0)
+}
+
+\begin{proc}{sumaDeFactoresPrimos}{\In n: \ent, \Out r: \ent}{}
+    \pre{n > 0}
+    \post{r = \sum_{k=2}^{n} \IfThenElse{esPrimo(k) \land n \bmod k = 0}{k}{0}}
+\end{proc}
+
+\subsubsection{Pregunta B}
+
+Dado un número entero positivo, decidir si es perfecto. Se dice que un número es perfecto cuando es igual a la suma de sus divisores (excluyéndose a sí mismo).
+
+\begin{proc}{esPerfecto}{\In n: \ent, \Out r: \bool}{}
+    \pre{n > 0}
+    \post{r = True \leftrightarrow n = \sum_{k=1}^{n-1} \IfThenElse{n \bmod k = 0}{k}{0}}
+\end{proc}
+
+\subsubsection{Pregunta C}
+
+Dado un número entero positivo $n$, obtener el menor entero positivo $m > 1$ tal que $m$ sea coprimo con $n$.
+
+\pred{sonCoprimos}{n, m: \ent}{
+    (\forall k: \ent)((k > 1) \implicaLuego \lnot(n \bmod k = 0 \land m \bmod k = 0))
+}
+
+\begin{proc}{menorCoprimo}{\In n: \ent, \Out m: \ent}{}
+    \pre{n > 0}
+    \post{m > 1 \land sonCoprimos(n, m) \land (\forall k: \ent)(k > 1 \land sonCoprimos(n, k) \implicaLuego m \leq k)}
+\end{proc}
+
+\subsubsection{Pregunta D}
+
+Dado un entero positivo, obtener su descomposición en factores primos. Devolver una secuencia de tuplas $(p, e)$, donde $p$ es un factor primo y $e$ es su exponente, ordenada en forma creciente con respecto a p.
+
+\pred{esPrimo}{n: \ent}{
+    (\forall k: \ent)(1 < k < n \implicaLuego n \bmod k \neq 0)
+}
+
+\pred{esUnaFactorizacionEnPrimos}{r: \TLista{\ent \times \ent}}{
+    (\forall i: \ent)(0 \leq i < |r| \implicaLuego esPrimo(r[i]_0) \land r[i]_1 \geq 1 \land (\nexists j: \ent)(0 \leq j < |r| \land j \neq i \yLuego r[j]_0 = r[i]_0))
+}
+
+\pred{esLaFactorizacionEnPrimos}{r: \TLista{\ent \times \ent}, n: \ent}{
+    \prod_{i=0}^{|r|-1} r[i]_0^{r[i]_1} = n
+}
+
+\pred{estaOrdenada}{r: \TLista{\ent \times \ent}}{
+    (\forall i: \ent)(0 \leq i < |r| - 1 \implicaLuego r[i]_0 < r[i+1]_0
+}
+
+\begin{proc}{descomponerEnPrimos}{\In n: \ent, \Out r: \TLista{\ent \times \ent}}{}
+    \pre{n > 0}
+    \post{esUnaFactorizacionEnPrimos(r) \land esLaFactorizacionEnPrimos(r, n) \land estaOrdenada(r)}
+\end{proc}
+
+\subsubsection{Pregunta E}
+
+Dada una secuencia de números reales, obtener la diferencia máxima entre dos de sus elementos.
+
+\begin{proc}{maximaDiferencia}{\In s: \TLista{\float}, \Out r: \float}{}
+    \pre{|s| \geq 2}
+    \post{(\exists x, y: \ent)(x \in s \land y \in s \land r = x - y \land (\nexists z, w: \ent)(z \in s \land w \in s \land r < z - w))}
+\end{proc}
+
+\subsubsection{Pregunta F}
+
+Dada una secuencia de números enteros, devolver aquel que divida a más elementos de dicha secuencia. El elemento tiene que pertenecer a la secuencia original. Si existe más de un elemento que cumple esta propiedad, devolver alguno de ellos.
+
+\aux{aCuantosDivide}{n: \ent, s: \TLista{\ent}}{\bool}{
+    \#\{ k \in s \mid k \bmod n = 0 \}
+}
+
+\begin{proc}{divideAMasElementos}{\In s: \TLista{\ent}, \Out r: \ent}{}
+    \pre{|s| \geq 1}
+    \post{r \in s \land (\forall n \in s)(n \neq 0 \implicaLuego aCuantosDivide(n, s) \leq aCuantosDivide(r, s))}
+\end{proc}
+
 \end{document}
