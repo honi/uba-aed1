@@ -453,7 +453,7 @@ Devuelve el índice de la n-ésima aparición de $e$ en $l$.
 Ejemplo: $nEsimaAparicion(l=\langle 1,2,3,2,4,5,6,2,7,8,2,9,0 \rangle, e=2, n=3) = 7$
 
 \begin{proc}{nEsimaAparicion}{\In l: \TLista{\float}, \In e: \float, \In n: \ent, \Out r: \ent}{}
-    \pre{e \in l}
+    \pre{0 < n \leq \#apariciones(l, e)}
     \post{0 \leq r < |l| \yLuego l[r] = e \yLuego n = \sum_{i=0}^{i=r} \IfThenElse{s[i] = e}{1}{0}}
 \end{proc}
 
@@ -472,25 +472,24 @@ Dadas dos secuencias $s$ y $t$, decidir si $s$ está incluida en $t$, es decir, 
 
 \begin{proc}{estaIncluida}{\In s: \TLista{T}, \In t: \TLista{T}, \Out r: \bool}{}
     \pre{True}
-    \post{r = true \leftrightarrow (\forall i: \ent)(0 \leq i < |s| \implicaLuego \#apariciones(s, s[i]) \leq \#apariciones(t, s[i])}
+    \post{r = true \leftrightarrow (\forall x: T)(\#apariciones(s, x) \leq \#apariciones(t, x)}
 \end{proc}
 
 \subsubsection{Pregunta D}
 
 Recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elementos de manera ordenada.
 
-\aux{min}{a: \ent, b: \ent}{\ent}{
-    \IfThenElse{a \leq b}{a}{b}
+\pred{estaOrdenada}{\In s: \TLista{T}}{
+    (\forall i: \ent)(1 \leq i < |r| \implicaLuego r[i-1] \leq r[i])
+}
+
+\pred{esPermutation}{\In s, t: \TLista{T}}{
+    (\forall x: T)(\#apariciones(s, x) = \#apariciones(t, x))
 }
 
 \begin{proc}{mezclarOrdenado}{\In s, t: \TLista{\ent}, \Out r: \TLista{\ent}}{}
-    \pre{True}
-    \post{ \\
-        |r| = |s| + |t| \\
-        \land (\forall i: \ent)(0 \leq i < min(|s|, |t|) \implicaLuego r[i*2] = s[i] \yLuego r[i*2 + 1] = t[i]) \\
-        \land |s| > |t| \implicaLuego subseq(s, |t|, |s|) = subseq(r, |t|, |r|) \\
-        \land |t| > |s| \implicaLuego subseq(t, |s|, |t|) = subseq(r, |s|, |r|) \\
-    }
+    \pre{estaOrdenada(s) \land estaOrdenada(t)}
+    \post{estaOrdenada(r) \land esPermutation(r, s ++ t)}
 \end{proc}
 
 \subsubsection{Pregunta E}
