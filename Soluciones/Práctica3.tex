@@ -466,13 +466,32 @@ Dadas dos secuencias $s$ y $t$, decidir si $s$ es una subcadena de $t$.
     \post{r = true \leftrightarrow (\exists i,j: \ent)(0 \leq i,j < |s| \yLuego s = subseq(t, i, j))}
 \end{proc}
 
-% \subsubsection{Pregunta C}
+\subsubsection{Pregunta C}
 
-% Dadas dos secuencias s y t, decidir si s est ́a incluida en t, es decir, si todos los elementos de s aparecen en t en igual o mayor cantidad.
+Dadas dos secuencias $s$ y $t$, decidir si $s$ está incluida en $t$, es decir, si todos los elementos de $s$ aparecen en $t$ en igual o mayor cantidad.
 
-% \subsubsection{Pregunta D}
+\begin{proc}{estaIncluida}{\In s: \TLista{T}, \In t: \TLista{T}, \Out r: \bool}{}
+    \pre{True}
+    \post{r = true \leftrightarrow (\forall i: \ent)(0 \leq i < |s| \implicaLuego \#apariciones(s, s[i]) <= \#apariciones(t, s[i])}
+\end{proc}
 
-% proc mezclarOrdenado(in s, t : seq⟨Z⟩, out result : seq⟨Z⟩), que recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elementos de manera ordenada.
+\subsubsection{Pregunta D}
+
+Recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elementos de manera ordenada.
+
+\aux{min}{a: \ent, b: \ent}{\ent}{
+    \IfThenElse{a <= b}{a}{b}
+}
+
+\begin{proc}{mezclarOrdenado}{\In s, t: \TLista{\ent}, \Out r: \TLista{\ent}}{}
+    \pre{True}
+    \post{ \\
+        |r| = |s| + |t| \\
+        \land (\forall i: \ent)(0 \leq i < min(|s|, |t|) \implicaLuego r[i*2] = s[i] \yLuego r[i*2 + 1] = t[i]) \\
+        \land |s| > |t| \implicaLuego subseq(s, |t|, |s|) = subseq(r, |t|, |r|) \\
+        \land |t| > |s| \implicaLuego subseq(t, |s|, |t|) = subseq(r, |s|, |r|) \\
+    }
+\end{proc}
 
 % \subsubsection{Pregunta E}
 
