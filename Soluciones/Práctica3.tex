@@ -440,4 +440,40 @@ Dada una secuencia de números enteros, devolver aquel que divida a más element
     \post{r \in s \land (\forall n \in s)(n \neq 0 \implicaLuego aCuantosDivide(n, s) \leq aCuantosDivide(r, s))}
 \end{proc}
 
+\subsection{Ejercicio 15}
+
+Especificar los siguientes problemas sobre secuencias:
+
+\subsubsection{Pregunta A}
+
+Devuelve el índice de la n-ésima aparición de $e$ en $l$.
+
+Ejemplo:
+$nEsimaAparicion(l=\langle 1,2,3,2,4,5,6,2,7,8,2,9,0 \rangle, e=2, n=3) = 7$
+
+\begin{proc}{nEsimaAparicion}{\In l: \TLista{\float}, \In e: \float, \In n: \ent, \Out result: \ent}{}
+    \pre{e \in l}
+    \post{0 \leq result < |l| \yLuego l[result] = e \yLuego n = \sum_{i=0}^{i=result} \IfThenElse{s[i] = e}{1}{0}}
+\end{proc}
+
+% \subsubsection{Pregunta B}
+
+% Dadas dos secuencias s y t, decidir si s es una subcadena de t.
+
+% \subsubsection{Pregunta C}
+
+% Dadas dos secuencias s y t, decidir si s est ́a incluida en t, es decir, si todos los elementos de s aparecen en t en igual o mayor cantidad.
+
+% \subsubsection{Pregunta D}
+
+% proc mezclarOrdenado(in s, t : seq⟨Z⟩, out result : seq⟨Z⟩), que recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elementos de manera ordenada.
+
+% \subsubsection{Pregunta E}
+
+% Dadas dos secuencias s y t especificar el procedimiento intersecci ́onSinRepetidos que retorna una secuencia que contiene u ́nicamente los elementos que aparecen en ambas secuencias.
+
+% \subsubsection{Pregunta F}
+
+% Dadas dos secuencias s y t, devolver su intersecci ́on, es decir, una secuencia con todos los elementos que aparecen en ambas. Si un mismo elemento tiene repetidos, la secuencia retornada debe contener la cantidad m ́ınima de apariciones en de s y de t.
+
 \end{document}
