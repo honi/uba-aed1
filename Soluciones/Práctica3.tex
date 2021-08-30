@@ -40,9 +40,11 @@ El problema es que la postcondición se puede indefinir si result está fuera de
 
 El problema es que se indefine al indexar $l[i-1]$ cuando $i=0$. Como queremos verificar que el elemento en el índice $i$ sea el doble que el elemento en el índice $i-1$, tenemos que arrancar a revisar desde $i=1$. Si la secuencia tiene un único elemento, entonces no hay que revisar nada pues el primer número de la progresión geométrica no va a ser el doble de nadie.
 
+Además, la variable de salida $result$, al ser del tipo $\bool$ se debe comparar con $true$ en minúscula.
+
 \begin{proc}{progresionGeometricaFactor2}{\In l: \TLista{\ent}, \Out result: \bool}{}
     \pre{True}
-    \post{result = True \leftrightarrow ((\forall i: \ent)(1 \leq i < |l| \implicaLuego l[i] = 2 * l[i-1]))}
+    \post{result = true \leftrightarrow ((\forall i: \ent)(1 \leq i < |l| \implicaLuego l[i] = 2 * l[i-1]))}
 \end{proc}
 
 \subsubsection{Pregunta C}
@@ -234,7 +236,7 @@ Dado un número entero, decidir si es par.
 
 \begin{proc}{esPar}{\In n: \ent, \Out r: \bool}{}
     \pre{True}
-    \post{r = True \leftrightarrow n \bmod 2 = 0}
+    \post{r = true \leftrightarrow n \bmod 2 = 0}
 \end{proc}
 
 \subsubsection{Pregunta B}
@@ -243,7 +245,7 @@ Dado un entero $n$ y uno $m$, decidir si $n$ es un múltiplo de $m$.
 
 \begin{proc}{esMúltiplo}{\In n: \ent, \In m: \ent, \Out r: \bool}{}
     \pre{True}
-    \post{r = True \leftrightarrow n \bmod m = 0}
+    \post{r = true \leftrightarrow n \bmod m = 0}
 \end{proc}
 
 \subsubsection{Pregunta C}
@@ -294,7 +296,7 @@ Sí, debería ser una entrada válida pero no lo es en la especificación dada, 
 
 \subsubsection{Pregunta C}
 
-\begin{proc}{esMultiplo]}{\In n, m: \ent, \Out result: \bool}{}
+\begin{proc}{esMultiplo}{\In n, m: \ent, \Out result: \bool}{}
     \pre{True}
     \post{result = \IfThenElse{m = 0}{n = 0}{n \bmod m = 0}}
 \end{proc}
@@ -377,7 +379,7 @@ Dado un número entero positivo, decidir si es perfecto. Se dice que un número 
 
 \begin{proc}{esPerfecto}{\In n: \ent, \Out r: \bool}{}
     \pre{n > 0}
-    \post{r = True \leftrightarrow n = \sum_{k=1}^{n-1} \IfThenElse{n \bmod k = 0}{k}{0}}
+    \post{r = true \leftrightarrow n = \sum_{k=1}^{n-1} \IfThenElse{n \bmod k = 0}{k}{0}}
 \end{proc}
 
 \subsubsection{Pregunta C}
