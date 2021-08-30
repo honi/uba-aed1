@@ -502,8 +502,17 @@ Dadas dos secuencias $s$ y $t$ especificar el procedimiento $interseccionSinRepe
     \post{(\forall x \in T)(x \in s \land x \in t \leftrightarrow x \in r) \land (\forall x \in r)(\#apariciones(r, x) = 1)}
 \end{proc}
 
-% \subsubsection{Pregunta F}
+\subsubsection{Pregunta F}
 
-% Dadas dos secuencias s y t, devolver su intersecci ́on, es decir, una secuencia con todos los elementos que aparecen en ambas. Si un mismo elemento tiene repetidos, la secuencia retornada debe contener la cantidad m ́ınima de apariciones en de s y de t.
+Dadas dos secuencias $s$ y $t$, devolver su intersección, es decir, una secuencia con todos los elementos que aparecen en ambas. Si un mismo elemento tiene repetidos, la secuencia retornada debe contener la cantidad mínima de apariciones en $s$ y $t$.
+
+\aux{min}{a: \ent, b: \ent}{\ent}{
+    \IfThenElse{a \leq b}{a}{b}
+}
+
+\begin{proc}{interseccion}{\In s, t: \TLista{T}, \Out r: \TLista{T}}{}
+    \pre{True}
+    \post{(\forall x \in T)(x \in s \land x \in t \leftrightarrow x \in r) \land (\forall x \in r)(\#apariciones(r, x) = min(\#apariciones(s, x), \#apariciones(t, x)))}
+\end{proc}
 
 \end{document}
