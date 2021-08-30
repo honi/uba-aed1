@@ -356,6 +356,8 @@ Entonces, respecto al ejercicio 8:
 
 \subsection{Ejercicio 14}
 
+Especificar los siguientes problemas:
+
 \subsubsection{Pregunta A}
 
 Dado un número entero positivo, obtener la suma de sus factores primos.
@@ -388,7 +390,7 @@ Dado un número entero positivo $n$, obtener el menor entero positivo $m > 1$ ta
 
 \begin{proc}{menorCoprimo}{\In n: \ent, \Out m: \ent}{}
     \pre{n > 0}
-    \post{m > 1 \land sonCoprimos(n, m) \land (\forall k: \ent)(k > 1 \land sonCoprimos(n, k) \implicaLuego m \leq k)}
+    \post{m > 1 \land sonCoprimos(n, m) \land (\forall k: \ent)(k > 1 \land sonCoprimos(n, k) \rightarrow m \leq k)}
 \end{proc}
 
 \subsubsection{Pregunta D}
@@ -422,7 +424,7 @@ Dada una secuencia de números reales, obtener la diferencia máxima entre dos d
 
 \begin{proc}{maximaDiferencia}{\In s: \TLista{\float}, \Out r: \float}{}
     \pre{|s| \geq 2}
-    \post{(\exists x, y: \ent)(x \in s \land y \in s \land r = x - y \land (\nexists z, w: \ent)(z \in s \land w \in s \land r < z - w))}
+    \post{(\exists x, y: \float)(x, y \in s \land r = x - y \land (\nexists z, w: \float)(z, w \in s \land z \neq x \land y \neq w \land z - w > r))}
 \end{proc}
 
 \subsubsection{Pregunta F}
