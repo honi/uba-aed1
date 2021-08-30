@@ -472,7 +472,7 @@ Dadas dos secuencias $s$ y $t$, decidir si $s$ está incluida en $t$, es decir, 
 
 \begin{proc}{estaIncluida}{\In s: \TLista{T}, \In t: \TLista{T}, \Out r: \bool}{}
     \pre{True}
-    \post{r = true \leftrightarrow (\forall i: \ent)(0 \leq i < |s| \implicaLuego \#apariciones(s, s[i]) <= \#apariciones(t, s[i])}
+    \post{r = true \leftrightarrow (\forall i: \ent)(0 \leq i < |s| \implicaLuego \#apariciones(s, s[i]) \leq \#apariciones(t, s[i])}
 \end{proc}
 
 \subsubsection{Pregunta D}
@@ -480,7 +480,7 @@ Dadas dos secuencias $s$ y $t$, decidir si $s$ está incluida en $t$, es decir, 
 Recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elementos de manera ordenada.
 
 \aux{min}{a: \ent, b: \ent}{\ent}{
-    \IfThenElse{a <= b}{a}{b}
+    \IfThenElse{a \leq b}{a}{b}
 }
 
 \begin{proc}{mezclarOrdenado}{\In s, t: \TLista{\ent}, \Out r: \TLista{\ent}}{}
@@ -495,7 +495,12 @@ Recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elemen
 
 % \subsubsection{Pregunta E}
 
-% Dadas dos secuencias s y t especificar el procedimiento intersecci ́onSinRepetidos que retorna una secuencia que contiene u ́nicamente los elementos que aparecen en ambas secuencias.
+% Dadas dos secuencias $s$ y $t$ especificar el procedimiento $interseccionSinRepetidos$ que retorna una secuencia que contiene únicamente los elementos que aparecen en ambas secuencias.
+
+% \begin{proc}{interseccionSinRepetidos}{\In s, t: \TLista{T}, \Out r: \TLista{T}}{}
+%     \pre{True}
+%     \post{}
+% \end{proc}
 
 % \subsubsection{Pregunta F}
 
