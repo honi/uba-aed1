@@ -493,14 +493,14 @@ Recibe dos secuencias ordenadas y devuelve el resultado de intercalar sus elemen
     }
 \end{proc}
 
-% \subsubsection{Pregunta E}
+\subsubsection{Pregunta E}
 
-% Dadas dos secuencias $s$ y $t$ especificar el procedimiento $interseccionSinRepetidos$ que retorna una secuencia que contiene únicamente los elementos que aparecen en ambas secuencias.
+Dadas dos secuencias $s$ y $t$ especificar el procedimiento $interseccionSinRepetidos$ que retorna una secuencia que contiene únicamente los elementos que aparecen en ambas secuencias.
 
-% \begin{proc}{interseccionSinRepetidos}{\In s, t: \TLista{T}, \Out r: \TLista{T}}{}
-%     \pre{True}
-%     \post{}
-% \end{proc}
+\begin{proc}{interseccionSinRepetidos}{\In s, t: \TLista{T}, \Out r: \TLista{T}}{}
+    \pre{True}
+    \post{(\forall x \in T)(x \in s \land x \in t \leftrightarrow x \in r) \land (\forall x \in r)(\#apariciones(r, x) = 1)}
+\end{proc}
 
 % \subsubsection{Pregunta F}
 
