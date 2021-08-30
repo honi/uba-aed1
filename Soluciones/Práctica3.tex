@@ -448,17 +448,21 @@ Especificar los siguientes problemas sobre secuencias:
 
 Devuelve el índice de la n-ésima aparición de $e$ en $l$.
 
-Ejemplo:
-$nEsimaAparicion(l=\langle 1,2,3,2,4,5,6,2,7,8,2,9,0 \rangle, e=2, n=3) = 7$
+Ejemplo: $nEsimaAparicion(l=\langle 1,2,3,2,4,5,6,2,7,8,2,9,0 \rangle, e=2, n=3) = 7$
 
-\begin{proc}{nEsimaAparicion}{\In l: \TLista{\float}, \In e: \float, \In n: \ent, \Out result: \ent}{}
+\begin{proc}{nEsimaAparicion}{\In l: \TLista{\float}, \In e: \float, \In n: \ent, \Out r: \ent}{}
     \pre{e \in l}
-    \post{0 \leq result < |l| \yLuego l[result] = e \yLuego n = \sum_{i=0}^{i=result} \IfThenElse{s[i] = e}{1}{0}}
+    \post{0 \leq r < |l| \yLuego l[r] = e \yLuego n = \sum_{i=0}^{i=r} \IfThenElse{s[i] = e}{1}{0}}
 \end{proc}
 
-% \subsubsection{Pregunta B}
+\subsubsection{Pregunta B}
 
-% Dadas dos secuencias s y t, decidir si s es una subcadena de t.
+Dadas dos secuencias $s$ y $t$, decidir si $s$ es una subcadena de $t$.
+
+\begin{proc}{esSubSecuencia}{\In s: \TLista{T}, \In t: \TLista{T}, \Out r: \bool}{}
+    \pre{True}
+    \post{r = true \leftrightarrow (\exists i,j: \ent)(0 \leq i,j < |s| \yLuego s = subseq(t, i, j))}
+\end{proc}
 
 % \subsubsection{Pregunta C}
 
