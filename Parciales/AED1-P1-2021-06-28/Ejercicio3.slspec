@@ -48,6 +48,8 @@ wp(S, Q)
 ≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=(i0-(i mod 2))*x
 
 
+// Pregunta B
+
 qvq P ⟹ wp(S, Q)
 
 Separo P en partes:
