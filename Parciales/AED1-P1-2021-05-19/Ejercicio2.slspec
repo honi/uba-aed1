@@ -1,0 +1,33 @@
+// Pregunta A
+
+pred menorLex(s: seq<ℤ>, t: seq<ℤ>) {
+    (∃k: ℤ)(
+        k≤|s| ∧ k≤|t|
+        ∧L mismosKElementos(s, t, k)
+        ∧ (|s|=k ∨ s[k]<t[k])
+    )
+}
+
+pred mismosKElementos(s: seq<ℤ>, t: seq<ℤ>, k: ℤ) {
+    (∀i: ℤ)(0≤i<k ⟹L s[i]=t[i])
+}
+
+
+// Pregunta B
+
+proc modificarSecuencia(inout s: seq<ℤ>, in t: seq<ℤ>, out d: ℤ) {
+    Pre {
+        0<|t|
+        ∧ s=S0
+    }
+    Post {
+        |s|=|S0|
+        ∧ menorLex(s, t)
+        ∧ d = distancia(s, S0)
+        ∧ esLaMenorDistancia(S0, t, d)
+    }
+}
+
+pred esLaMenorDistancia(s: seq<ℤ>, t: seq<ℤ>, d: ℤ) {
+    ¬(∃v: seq<ℤ>)(|v|=|s| ∧ menorLex(v, t) ∧ distancia(v, s) > d)
+}

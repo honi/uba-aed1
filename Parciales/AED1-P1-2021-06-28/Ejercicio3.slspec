@@ -1,0 +1,80 @@
+if (i mod 2 == 0) then
+    i := 2 * m[i div 2]
+else
+    i := 2 * m[i div 2] + x
+endif
+
+P ≡ i=i0 ∧ 1≤i<|m| ∧ (∀k:ℤ)(0≤k<|m| ⟹L m[k]=k*x)
+Q ≡ i=i0*x
+B ≡ (i mod 2 == 0)=true ≡ (i mod 2)=0
+¬B ≡ (i mod 2)=1
+S1 ≡ i := 2 * m[i div 2]
+S2 ≡ i := 2 * m[i div 2] + x
+
+
+// Pregunta A
+
+wp(S, Q)
+≡ def(B) ∧L ((B ∧ wp(S1, Q)) ∨ (¬B ∧ wp(S2, Q))) // Axioma 4
+
+def(B) ≡ def(i) ≡ True // Asumimos que todas las variables están definidas
+
+wp(S1, Q)
+≡ wp(i := 2 * m[i div 2], Q)
+≡ def(m[i div 2]) ∧L Q(i := 2 * m[i div 2]) // Axioma 1
+≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=i0*x
+
+wp(S2, Q)
+≡ wp(i := 2 * m[i div 2] + x, Q)
+≡ def(m[i div 2]) ∧ def(x) ∧L Q(i := 2 * m[i div 2] + x) // Axioma 1
+≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]+x=i0*x
+≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=i0*x-x
+≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=(i0-1)*x
+
+
+wp(S, Q)
+≡ (B ∧ wp(S1, Q)) ∨ (¬B ∧ wp(S2, Q))
+
+≡ ((i mod 2)=0 ∧ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=i0*x)
+∨ ((i mod 2)=1 ∧ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=(i0-1)*x)
+
+// (P ∧ Q) ∨ (R ∧ Q) ≡ Q ∧ (P ∨ R)
+
+≡ 0≤(i div 2)<|m| ∧L (
+    ((i mod 2)=0 ∧ 2*m[i div 2]=i0*x)
+    ∨ ((i mod 2)=1 ∧ 2*m[i div 2]=(i0-1)*x)
+)
+
+≡ 0≤(i div 2)<|m| ∧L 2*m[i div 2]=(i0-(i mod 2))*x
+
+
+qvq P ⟹ wp(S, Q)
+
+Separo P en partes:
+P1: i=i0
+P2: 1≤i<|m|
+P3: (∀k:ℤ)(0≤k<|m| ⟹L m[k]=k*x)
+
+Separo wp(S, Q) en partes:
+W1: 0≤(i div 2)<|m|
+W2: 2*m[i div 2]=(i0-(i mod 2))*x
+
+P2 ⟹ W1
+
+P2 ∧ P3 ⟹ m[i]=i*x
+
+i=i0 ∧ m[i]=i*x ⟹ 2*(i div 2)*x = (i-(i mod 2))*x
+
+Basta probar que:
+2*(i div 2)*x = (i-(i mod 2))*x ⟺ 2*(i div 2)=(i-(i mod 2))
+
+Caso (i mod 2)=0
+2*(i div 2) = (i-(i mod 2))
+⟺ 2*(i/2) = i
+⟺ i = i
+
+Caso (i mod 2)=1
+2*(i div 2) = (i-(i mod 2))
+⟺ 2*((i-1)/2) = i-1
+⟺ i-1 = i-1
+⟺ i = i

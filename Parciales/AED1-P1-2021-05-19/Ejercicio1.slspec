@@ -1,0 +1,65 @@
+Pc : {|s|>0 ∧ i=1 ∧ r=True}
+
+while (i < s.size()) do
+    r := r && (s[i-1] == s[i]); // S1
+    i := i+1                    // S2
+endwhile
+
+Qc : {r=true ⟺ (∃x:Z)(∀k:Z)(0≤k<|s| ⟹L s[k]=x)}
+
+--------------------------------------------------------------------------------
+
+I : {1≤i≤|s| ∧L (r=true ⟺ (∃x:Z)(∀k:Z)(0≤k<i ⟹L s[k]=x))}
+
+--------------------------------------------------------------------------------
+
+Pc ⟹ I
+    *) Parte 1
+    |s|>0 ∧ i=1 ⟹ 1≤i≤|s|
+
+    *) Parte 2
+    |s|>0 ∧ i=1 ∧ r=true
+        ⟹ (true=true ⟺ (∃x:Z)(∀k:Z)(0≤k<1 ⟹L s[k]=x))
+        ≡ (∃x:Z)(s[0]=x)
+        ≡ True
+
+--------------------------------------------------------------------------------
+
+{I ∧ B} S1;S2 {I} ≡ I ∧ B ⟹ wp(S1, wp(S2, I))
+
+wp(S2, I)
+    ≡ def(i+1) ∧L I(i := i+1)
+    ≡ 1≤i+1≤|s| ∧L r=true ⟺ (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x)
+    ≡ E2
+
+wp(S1, wp(S2, I))
+    ≡ def(r && (s[i-1]==s[i])) ∧L E2(r := r && (s[i-1]==s[i]))
+    ≡ 0≤i-1<|s| ∧ 0≤i<|s| ∧L (r && s[i-1]==s[i])=true ⟺ (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x)
+    ≡ 1≤i<|s| ∧L (r && s[i-1]==s[i])=true ⟺ (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x)
+    ≡ E1
+
+I ∧ B ⟹ wp(S1, wp(S2, I)) ≡ E1
+    *) Parte 1
+    1≤i≤|s| ∧ i<|s| ⟹ 1≤i<|s|
+
+    *) Parte 2: Pruebo (⟹)
+    r=true ⟹ (∃x:Z)(∀k:Z)(0≤k<i ⟹L s[k]=x))
+    r=true ∧ (r && s[i-1]==s[i])=true ⟹ s[i-1]=s[i]
+    Juntando ambas implicaciones:
+    (∃x:Z)(∀k:Z)(0≤k<i ⟹L s[k]=x)) ∧ s[i-1]=s[i] ⟹ (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x)
+
+    *) Parte 3: Pruebo (⟸)
+    (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x) ⟹ (∃x:Z)(∀k:Z)(0≤k<i ⟹L s[k]=x)) ⟹ r=true
+    (∃x:Z)(∀k:Z)(0≤k<i+1 ⟹L s[k]=x) ⟹ s[i-1]=s[i]
+    Juntando ambas implicaciones:
+    r=true ∧ s[i-1]=s[i] ⟹ (r && s[i-1]==s[i])=true
+
+--------------------------------------------------------------------------------
+
+I ∧ ¬B ⟹ Qc
+    *) Parte 1
+    1≤i≤|s| ∧ i≥|s| ⟹ i=|s|
+
+    *) Parte 2
+    (i=|s| ∧L (r=True ⟺ (∃x:Z)(∀k:Z)(0≤k<i ⟹L s[k]=x)))
+        ⟹ r=True ⟺ (∃x:Z)(∀k:Z)(0≤k<|s| ⟹L s[k]=x)

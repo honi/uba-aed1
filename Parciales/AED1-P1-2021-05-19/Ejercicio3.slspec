@@ -1,0 +1,148 @@
+if (s[i] > s[i + 1]) then
+    tmp := s[i];
+    s[i] := s[i + 1];
+    s[i + 1] := tmp
+else
+    skip
+endif
+
+// Pregunta A
+
+B ≡ s[i]>s[i+1]
+S1 ≡ tmp := s[i]
+S2 ≡ s[i] := s[i+1]
+S3 ≡ s[i+1] := tmp
+S4 ≡ skip
+P ≡ (s=S0 ∧ 1≤i+1<|s|) ∧L ordenadaHasta(s, i)
+Q ≡ (|s|=|S0| ∧ 1≤i+1<|s|) ∧L ordenadaHasta(s, i+1)
+
+--------------------------------------------------------------------------------
+
+wp(S, Q) ≡ def(B) ∧L ((B ∧ wp(S1;S2;S3, Q)) ∨ (¬B ∧ wp(S4, Q))) // Axioma 4
+
+--------------------------------------------------------------------------------
+
+def(B)
+≡ def(s) ∧ def(i) ∧ 0≤i<|s| ∧ 0≤i+1<|s|
+≡ True ∧ True ∧ 0≤i<|s|-1 // Asumimos que todas las variables están definidas
+≡ 0≤i<|s|-1
+
+--------------------------------------------------------------------------------
+
+wp(S1;S2;S3, Q) ≡ wp(S1, wp(S2, wp(S3, Q))) // Axioma 3
+
+--------------------------------------------------------------------------------
+
+wp(S3, Q)
+≡ wp(s[i+1] := tmp, Q)
+≡ wp(s := setAt(s, i+1, tmp), Q) // Reescribo la asignación de un elemento dentro de la secuencia s como un setAt
+≡ def(s) ∧ def(i) ∧ def(tmp) ∧ 0≤i+1<|s| ∧L Q(s := setAt(s, i+1, tmp)) // Axioma 1
+≡ True ∧ True ∧ True ∧ 0≤i+1<|s| ∧L Q(s := setAt(s, i+1, tmp)) // Asumimos que todas las variables están definidas
+// Al aplicar el reemplazo en Q, como setAt no modifica el largo de la secuencia ⟹ |setAt(s, i+1, tmp)| = |s|
+≡ 0≤i+1<|s| ∧L (|s|=|S0| ∧ 1≤i+1<|s|) ∧L ordenadaHasta(setAt(s, i+1, tmp), i+1)
+≡ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L ordenadaHasta(setAt(s, i+1, tmp), i+1)
+≡ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(1≤j+1<i+1 ⟹L setAt(s, i+1, tmp)[j] ≤ setAt(s, i+1, tmp)[j+1])
+≡ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j]≤s[j+1]) // Pues en ningún momento se indexa s[i+1] ya que el valor máximo de j es i-1, y por lo tanto el índice máximo que se indexa es i-1+1=i
+≡ E3
+
+--------------------------------------------------------------------------------
+
+A partir de acá aplico las siguientes operaciones de forma directa:
+1. Al aplicar el axioma 1 asumo que todas las variables están definidas
+2. Al aplicar el axioma 1 con un setAt, |setAt(s, ...)| = |s|
+
+wp(S2, wp(S3, Q))
+≡ wp(S2, E3)
+≡ wp(s[i] := s[i+1], E3)
+≡ wp(s := setAt(s, i, s[i+1]), E3)
+≡ 0≤i+1<|s| ∧L E3(s := setAt(s, i, s[i+1]))
+≡ 0≤i+1<|s| ∧L (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L setAt(s, i, s[i+1])[j] ≤ setAt(s, i, s[i+1])[j+1])
+≡ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1])
+≡ E2
+
+--------------------------------------------------------------------------------
+
+wp(S1, wp(S2, wp(S3, Q)))
+≡ wp(S1, E2)
+≡ wp(tmp := s[i], E2)
+≡ 0≤i<|s| ∧L E2(tmp := s[i])
+≡ 0≤i<|s| ∧L (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1])
+≡ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1])
+≡ E1
+
+--------------------------------------------------------------------------------
+
+B ∧ wp(S1;S2;S3, Q)
+≡ B ∧ E1
+≡ s[i]>s[i+1] ∧ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1])
+
+--------------------------------------------------------------------------------
+
+wp(S4, Q) ≡ wp(skip, Q) ≡ Q // Axioma 2
+
+--------------------------------------------------------------------------------
+
+¬B ∧ wp(S4, Q)
+≡ ¬B ∧ Q
+≡ ¬(s[i]>s[i+1]) ∧ Q
+≡ s[i]≤s[i+1] ∧ (|s|=|S0| ∧ 1≤i+1<|s|) ∧L ordenadaHasta(s, i+1)
+≡ s[i]≤s[i+1] ∧ (|s|=|S0| ∧ 1≤i+1<|s|) ∧L (∀j: ℤ)(1≤j+1<i+1 ⟹L s[j]≤s[j+1])
+≡ s[i]≤s[i+1] ∧ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j]≤s[j+1])
+
+--------------------------------------------------------------------------------
+
+Junto todo
+
+wp(S, Q)
+≡ def(B) ∧L ((B ∧ wp(S1;S2;S3, Q)) ∨ (¬B ∧ wp(S4, Q)))
+≡ 0≤i<|s|-1 ∧L (
+    (s[i]>s[i+1] ∧ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1]))
+    ∨
+    s[i]≤s[i+1] ∧ (|s|=|S0| ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i ⟹L s[j]≤s[j+1])
+)
+≡ |s|=|S0| ∧ 0≤i<|s|-1 ∧L (
+    (s[i]>s[i+1] ∧ (∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1]))
+    ∨
+    s[i]≤s[i+1] ∧ (∀j: ℤ)(0≤j<i ⟹L s[j]≤s[j+1])
+)
+
+--------------------------------------------------------------------------------
+
+// Pregunta B
+
+No, el programa no es correcto respecto a la especificación.
+
+Contraejemplo: ajustar(<1,2,4,3,5>, 3)
+La entrada cumple la precondición (mostrarlo).
+El programa va a chequear s[3] > s[4] lo cual no es verdadero, y por lo tanto ejecuta la rama else con un skip y termina.
+En efecto, la secuencia s queda sin modificar, y no se cumple la post condición.
+Puntualmente, ordenadaHasta(s, i+1) no es verdadero ya que:
+
+ordenadaHasta(s, i+1)
+≡ (∀j: ℤ)(1≤j+1<i+1 ⟹L s[j]≤s[j+1])
+≡ (∀j: ℤ)(0≤j<i ⟹L s[j]≤s[j+1])
+
+ordenadaHasta(<1,2,4,3,5>, 4)
+≡ s[0]≤s[1]≤s[2]≤s[3]
+≡ 1≤2≤4≤3
+≡ False
+
+Si quisieramos demostrar la correctitud del programa, tendríamos que probar P ⟹ wp(S, Q).
+
+P
+≡ (s=S0 ∧ 1≤i+1<|s|) ∧L ordenadaHasta(s, i)
+≡ (s=S0 ∧ 1≤i+1<|s|) ∧L (∀j: ℤ)(1≤j+1<i ⟹L s[j]≤s[j+1])
+≡ (s=S0 ∧ 0≤i<|s|-1) ∧L (∀j: ℤ)(0≤j<i-1 ⟹L s[j]≤s[j+1])
+
+s=S0 ⟹ |s|=|S0|
+
+0≤i<|s|-1 ⟹ 0≤i<|s|-1 (trivial)
+
+Caso s[i] > s[i+1]
+(∀j: ℤ)(0≤j<i ⟹L s[j] ≤ setAt(s, i, s[i+1])[j+1])
+≡ (∀j: ℤ)(0≤j<i-1 ⟹L s[j]≤s[j+1]) ∧ (i>0 ∧L s[i-1] ≤ setAt(s, i, s[i+1])[i-1+1])
+≡ (∀j: ℤ)(0≤j<i-1 ⟹L s[j]≤s[j+1]) ∧ (i>0 ∧L s[i-1] ≤ setAt(s, i, s[i+1])[i])
+≡ (∀j: ℤ)(0≤j<i-1 ⟹L s[j]≤s[j+1]) ∧ (i>0 ∧L s[i-1] ≤ s[i+1])
+
+El problema sucede acá, la precondición me permite implicar lo de la izquierda (que es trivialmente cierto pues es el mismo predicado),
+pero no se puede implicar la parte de la derecha: (i>0 ∧L s[i-1] ≤ s[i+1])

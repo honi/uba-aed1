@@ -1,0 +1,65 @@
+// Pregunta A
+
+flowchart TD
+    L1["int i=0;"]
+    --> L2["int a=0;"]
+    --> L3["int b=0;"]
+    --> L4["while (i < s1.size())"]
+    --> |True| L5["a = s1[i];"]
+    --> L6["if (i >= s2.size())"]
+        L6 --> |True| L7["b = 0;"] --> L9
+        L6 --> |False| L8["b = s2[i];"] --> L9
+    L9["s1[i] = a + b;"]
+    --> L10["if (i < s2.size())"]
+        L10 --> |True| L11["if (a - b > 0)"]
+                L11 --> |True| L12["s2[i] = b - a;"] --> L14
+                L11 --> |False| L13["s2[i] = a - b;"] --> L14
+        L10 --> |False| L14
+    L14["i++"] --> L4
+    L4 --> |False| L15(("return"))
+
+
+// Pregunta B
+
+test1: mismaLongitud
+Entrada:
+    s1 = {1,2,3}
+    s2 = {1,1,4}
+Salida esperada:
+    s1 = {2,3,7}
+    s2 = {0,1,1}
+Líneas cubiertas: L1,L2,L3,L4,L5,L6,L8,L9,L10,L11,L12,L13,L14
+Decisiones cubiertas: L4-True,L4-False,L6-False,L10-True,L11-True,L11-False
+
+test2: s1MasGrande
+Entrada:
+    s1 = {1,2,3}
+    s2 = {1,1}
+Salida esperada:
+    s1 = {2,3,3}
+    s2 = {0,1}
+Líneas cubiertas: L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11,L12,L13,L14
+Decisiones cubiertas: L4-True,L4-False,L6-True,L6-False,L10-True,L10-False,L11-True,L11-False
+
+Este test suite es suficiente para cubrir todas las líneas y todas las decisiones.
+
+
+// Pregunta C
+
+test: s2TieneElModuloDeLaDiferenciaConS1
+Entrada:
+    s1 = {2}
+    s2 = {1}
+Salida esperada:
+    s1 = {3}
+    s2 = {1}
+
+
+// Pregunta D
+
+No es posible. Una de las condiciones para cubrir todas las decisiones es que las secuencias tengan al menos 2
+elementos, y que su diferencia sea > 0 en un índice y ≤ 0 en otro. De esta forma se ejecutan L12 y L13. Pero ahí es
+donde está el problema, el cálculo del módulo está al revés. Se puede "engañar" al programa y generar una salida válida
+para el caso a-b ≤ 0 usando a=b=0. Pero es imposible plantear a y b tales que a-b > 0 para entrar en L11-True y que
+luego resulte en ese índice |a-b| como pide la postcondición, ya que L12 asigna b-a en ese índice.
+a-b > 0 ⟺ a > b ⟺ 0 > b-a ≠ |a-b|

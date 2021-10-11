@@ -5,9 +5,6 @@ Cursada: 2do cuatrimestre 2021 (virtual)
 
 ## Índice
 
-- Enunciados
-  - [Práctica 1](Enunciados/Práctica1.pdf)
-  - [Práctica 2](Enunciados/Práctica2.pdf)
-  - [Práctica 3](Enunciados/Práctica3.pdf)
-- Soluciones
-  - [Práctica 3](Soluciones/Práctica3.pdf)
+- Parciales resueltos
+  - [AED1-P1-2021-06-28](Parciales/AED1-P1-2021-06-28)
+  - [AED1-P1-2021-05-19](Parciales/AED1-P1-2021-05-19)
