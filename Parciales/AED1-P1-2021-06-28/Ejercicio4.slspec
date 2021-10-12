@@ -1,0 +1,57 @@
+// Pregunta A
+
+flowchart TD
+    L1["int i=0;"]
+    L2["while (i < s.size())"]
+    L3["if (i == 0)"]
+    L4["i = i + 1"]
+    L5["s[i] >= s[i - 1]"]
+    L6["i = i + 1"]
+    L8["s[i] = s[i - 1]"]
+    L9["s[i - 1] = s[i]"]
+    L10["i = i - 1"]
+    L11["return"]
+
+    L1 --> L2
+    L2 --> |True| L3
+    L2 --> |False| L11
+    L3 --> |True| L4 --> L2
+    L3 --> |False| L5
+    L5 --> |True| L6 --> L2
+    L5 --> |False| L8 --> L9 --> L10 --> L2
+
+
+    // Pregunta B
+
+test1
+Entrada:
+    s = {0,2,1}
+Salida esperada:
+    s = {0,1,2}
+Líneas cubiertas: L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11
+Decisiones cubiertas: L2-True,L2-False,L3-True,L3-False,L5-True,L5-False
+
+
+// Pregunta C
+
+test: tieneQueHacerBienElSwapYMantenerTodosLosElementosOriginalesDeLaSecuencia
+Entrada:
+    s = {2,1}
+Salida esperada:
+    s = {1,2}
+
+
+// Pregunta D
+
+No es posible.
+
+El problema del algoritmo es que está mal implementado el swap en las líneas L8-L9. Cuando entra por esa rama/decisión, es verdadero que s[i] < s[i-1], y para que la secuencia resulte ordenada es necesario swapear esos 2 elementos para que resulte s[i] >= s[i-1], en particular s[i] > s[i-1].
+
+Al no guardar el valor de s[i] en una variable temporal (o usar algún otro método para swapear 2 números), lo que termina haciendo el código es simplemente copiar s[i-1] en s[i]. Es decir, quedan ambas posiciones de la secuencia con el valor de s[i-1] y se pierde el valor original de s[i].
+
+Al cubrir esta rama/decisión en un test case, solo vamos a poder obtener una salida que cumple parcialmente con la post condición. Puntualmente, va a estar ordenada y va a tener la misma longitud que la secuencia de entrada, pero no va a contener los mismos elementos (contando repeticiones) de la secuencia de entrada.
+
+Una forma de arreglar el programa sería reemplazando las líneas L8-L9 por estas otras:
+int tmp = s[i];
+s[i] = s[i - 1];
+s[i - 1] = tmp;
