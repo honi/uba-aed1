@@ -13,13 +13,13 @@ pred genera(cadena: seq<seq<ℤ>>, is: seq<ℤ×ℤ>) {
     |cadena|>0
     ∧L esPerm(cadena[0])
     ∧ (∀i: ℤ)(0≤i<|cadena|-1 ⟹L
-        esIntercambio(cadena[i], cadena[i+1], (is[i])₀, (is[i])₁)
+        |cadena[i]| = |cadena[i+1]|
+        ∧ esIntercambio(cadena[i], cadena[i+1], (is[i])₀, (is[i])₁)
     )
 }
 
 pred esIntercambio(viejo: seq<ℤ>, nuevo: seq<ℤ>, i: ℤ, j: ℤ) {
     0 ≤ i,j < |viejo|
-    ∧ 0 ≤ i,j < |nuevo|
     ∧L (nuevo[i] = viejo[j] ∧ nuevo[j] = viejo[i])
 }
 

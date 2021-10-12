@@ -21,7 +21,7 @@ flowchart TD
     L5 --> |False| L8 --> L9 --> L10 --> L2
 
 
-    // Pregunta B
+// Pregunta B
 
 test1
 Entrada:
