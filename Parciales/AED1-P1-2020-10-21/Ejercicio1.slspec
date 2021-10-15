@@ -7,7 +7,7 @@ endwhile
 
 Qc : { result=true ⟺ (∀k: ℤ)(0≤k<|s| ⟹L s[k]≠7) }
 
-I : { i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) }
+I : { 0≤i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) }
 
 S1 ≡ i := i+1;
 S2 ≡ result := result && (s[i-1] != 7);
@@ -33,15 +33,17 @@ wp(S1, wp(S2, I))
 qvq I ∧ B ⟹ wp(S, I)
 
 I ∧ B
-≡ i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ i<|s|
-≡ i<|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
+≡ 0≤i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ i<|s|
+≡ 0≤i<|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
 
-i<|s| ⟹ 0≤i<|s|
+0≤i<|s| ⟹ 0≤i<|s|
 
 // Q ≡ result=true
 // R ≡ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
 // P ≡ s[i]≠7
 // (Q ⟺ R) ⟹ (P ∧ Q ⟺ P ∧ R)
-// Obs: Q ∧ R ≡ I ∧ B
+// Obs:
+// Q ⟺ R es parte de I ∧ B
+// (P ∧ Q ⟺ P ∧ R) es parte de wp(S, I)
 result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) // En (I ∧ B)
     ⟹ (result=true ∧ s[i]≠7) ⟺ ((∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ s[i]≠7) // En wp(S, I)
