@@ -1,0 +1,99 @@
+res := false;
+if (s[i] == 42) then
+    s[i] := s[i] + 1;
+    res := true
+else
+    s[i] := 43
+endif
+
+S1 ≡ res := false;
+S2 ≡ s[i] := s[i] + 1;
+S3 ≡ res := true
+S4 ≡ s[i] := 43
+B ≡ s[i]=42
+S ≡ S1;if B then S2;S3 else S4
+
+P : { s=S0 ∧ |s|>0 ∧ 0≤i<|s| }
+Q : {
+    |s|=|S0|
+    ∧L (res=true ⟺ S0[i]=42)
+    ∧ s[i]=43
+    ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+}
+
+// Pregunta A
+
+wp(S, Q)
+≡ wp(S1;if B then S2;S3 else S4, Q)
+≡ wp(S1, wp(if B then S2;S3 else S4, Q)) // Ax3
+
+wp(if B then S2;S3 else S4, Q)
+≡ def(B) ∧L ((B ∧ wp(S2;S3, Q)) ∨ (¬B ∧ wp(S4, Q)))
+≡ def(B) ∧L ((B ∧ wp(S2, wp(S3, Q))) ∨ (¬B ∧ wp(S4, Q)))
+
+def(B) ≡ 0≤i<|s|
+
+wp(S3, Q)
+≡ |s|=|S0| ∧L (true=true ⟺ S0[i]=42) ∧ s[i]=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+≡ |s|=|S0| ∧L S0[i]=42 ∧ s[i]=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+
+wp(S2, wp(S3, Q))
+≡ wp(s[i] := s[i]+1, wp(S3, Q))
+≡ wp(setAt(s, i, s[i]+1), wp(S3, Q))
+≡ 0≤i<|s| ∧L |s|=|S0| ∧L S0[i]=42 ∧ setAt(s, i, s[i]+1)[i]=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L setAt(s, i, s[i]+1)[j]=S0[j])
+≡ 0≤i<|s| ∧ |s|=|S0| ∧L S0[i]=42 ∧ s[i]+1=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+≡ 0≤i<|s| ∧ |s|=|S0| ∧L S0[i]=42 ∧ s[i]=42 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+
+B ∧ wp(S2, wp(S3, Q))
+≡ s[i]=42 ∧ 0≤i<|s| ∧ |s|=|S0| ∧L S0[i]=42 ∧ s[i]=42 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+≡ s[i]=42 ∧ 0≤i<|s| ∧ |s|=|S0| ∧L S0[i]=42 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+
+wp(S4, Q)
+≡ wp(s[i] := 43, Q)
+≡ wp(setAt(s, i, 43), Q)
+≡ 0≤i<|s| ∧L |s|=|S0| ∧L (res=true ⟺ S0[i]=42) ∧ setAt(s, i, 43)[i]=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L setAt(s, i, 43)[j]=S0[j])
+≡ 0≤i<|s| ∧ |s|=|S0| ∧L (res=true ⟺ S0[i]=42) ∧ 43=43 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+≡ 0≤i<|s| ∧ |s|=|S0| ∧L (res=true ⟺ S0[i]=42) ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+
+¬B ∧ wp(S4, Q)
+≡ s[i]≠42 ∧ 0≤i<|s| ∧ |s|=|S0| ∧L (res=true ⟺ S0[i]=42) ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+
+wp(if B then S2;S3 else S4, Q)
+≡ def(B) ∧L ((B ∧ wp(S2, wp(S3, Q))) ∨ (¬B ∧ wp(S4, Q)))
+≡ 0≤i<|s| ∧L (
+    (s[i]=42 ∧ 0≤i<|s| ∧ |s|=|S0| ∧L S0[i]=42 ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j]))
+    ∨
+    (s[i]≠42 ∧ 0≤i<|s| ∧ |s|=|S0| ∧L (res=true ⟺ S0[i]=42) ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j]))
+)
+≡ 0≤i<|s| ∧L |s|=|S0| ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j]) ∧ (
+    (s[i]=42 ∧ S0[i]=42)
+    ∨
+    (s[i]≠42 ∧ (res=true ⟺ S0[i]=42))
+)
+
+wp(S1, wp(if B then S2;S3 else S4, Q))
+≡ 0≤i<|s| ∧L |s|=|S0| ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j]) ∧ (
+    (s[i]=42 ∧ S0[i]=42)
+    ∨
+    (s[i]≠42 ∧ (false=true ⟺ S0[i]=42))
+)
+// False ⟺ Q ≡ ¬Q
+// false=true ≡ False ⟹ False ⟺ S0[i]=42 ≡ S0[i]≠42
+≡ 0≤i<|s| ∧L |s|=|S0| ∧ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j]) ∧ (
+    (s[i]=42 ∧ S0[i]=42)
+    ∨
+    (s[i]≠42 ∧ S0[i]≠42)
+)
+
+// Pregunta B
+
+El programa es correcto respecto a la especificación.
+
+qvq P ⟹ wp(S, Q)
+
+P ≡ s=S0 ∧ |s|>0 ∧ 0≤i<|s|
+
+0≤i<|s| ⟹ 0≤i<|s|
+s=S0 ⟹ |s|=|S0|
+s=S0 ⟹ (∀j:ℤ)((0≤j<|s| ∧ i≠j) ⟹L s[j]=S0[j])
+s=S0 ∧ 0≤i<|s| ⟹ s[i]=S0[i] ⟹ (s[i]=42 ∧ S0[i]=42) ∨ (s[i]≠42 ∧ S0[i]≠42)

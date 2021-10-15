@@ -1,0 +1,94 @@
+while (i>n) do
+    i = i-1;
+    s[i] = s[i-1]
+endwhile
+
+Pc : {|s|>1 ∧ 0<n<|s| ∧ i=|s| ∧ s=S0}
+Qc : {|s|=|S0| ∧L (∀k:ℤ)(0≤k<n ⟹L s[k]=S0[k])) ∧ ((∀k:ℤ)(n≤k<|s| ⟹L s[k]=S0[k−1])}
+I : {|s|=|S0| ∧L 0<n≤i≤|s| ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k])) ∧ ((∀k:ℤ)(i≤k<|s| ⟹L s[k]=S0[k−1])}
+B ≡ i>n
+¬B ≡ i≤n
+
+// (I ∧ ¬B) ⟹ Qc
+
+I ∧ ¬B ≡ |s|=|S0| ∧L 0<n≤i≤|s| ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k])) ∧ ((∀k:ℤ)(i≤k<|s| ⟹L s[k]=S0[k−1]) ∧ i≤n
+
+|s|=|S0| ⟹ |s|=|S0|
+
+0<n≤i≤|s| ∧ i≤n ≡ i=n
+
+i=n ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k])) ⟹ (∀k:ℤ)(0≤k<n ⟹L s[k]=S0[k]))
+i=n ∧ ((∀k:ℤ)(i≤k<|s| ⟹L s[k]=S0[k−1]) ⟹ ((∀k:ℤ)(n≤k<|s| ⟹L s[k]=S0[k−1])
+
+// {I ∧ B} S {I}
+
+{I ∧ B} S {I} ⟺ (I ∧ B) ⟹ wp(S, I)
+
+S1 ≡ i=i-1
+S2 ≡ s[i]=s[i-1]
+S ≡ S1;S2
+
+wp(S, I)
+≡ wp(S1;S2, I)
+≡ wp(S1, wp(S2, I)) // Ax3
+
+wp(S2, I)
+≡ wp(s[i]=s[i-1], I)
+≡ wp(setAt(s, i, s[i-1]), I)
+// Obs: |setAt(s, i, s[i-1])| = |s|
+≡ 0≤i<|s| ∧ 0≤i-1<|s|
+    ∧L |s|=|S0|
+    ∧ i≥n
+    ∧ (∀k:ℤ)(0≤k<i ⟹L setAt(s, i, s[i-1])[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i≤k<|s| ⟹L setAt(s, i, s[i-1])[k]=S0[k−1])
+≡ 1≤i<|s|
+    ∧L |s|=|S0|
+    ∧ i≥n
+    ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i≤k<|s| ⟹L setAt(s, i, s[i-1])[k]=S0[k−1])
+≡ 1≤i<|s|
+    ∧L |s|=|S0|
+    ∧ i≥n
+    ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i<k<|s| ⟹L setAt(s, i, s[i-1])[k]=S0[k−1])
+    ∧ setAt(s, i, s[i-1])[i]=S0[i−1]
+≡ 1≤i<|s|
+    ∧L |s|=|S0|
+    ∧ i≥n
+    ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i<k<|s| ⟹L s[k]=S0[k−1])
+    ∧ s[i-1]=S0[i−1]
+
+wp(S1, wp(S2, I))
+≡ 1≤i-1<|s|
+    ∧L |s|=|S0|
+    ∧ i-1≥n
+    ∧ (∀k:ℤ)(0≤k<i-1 ⟹L s[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i-1<k<|s| ⟹L s[k]=S0[k−1])
+    ∧ s[i-1-1]=S0[i-1−1]
+≡ 1≤i-1<|s|
+    ∧L |s|=|S0|
+    ∧ i-1≥n
+    ∧ (∀k:ℤ)(0≤k<i-1 ⟹L s[k]=S0[k]))
+    ∧ ((∀k:ℤ)(i-1<k<|s| ⟹L s[k]=S0[k−1])
+    ∧ s[i-2]=S0[i-2]
+
+I ∧ B
+≡ |s|=|S0| ∧L 0<n≤i≤|s| ∧ (∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k])) ∧ ((∀k:ℤ)(i≤k<|s| ⟹L s[k]=S0[k−1]) ∧ i>n
+
+|s|=|S0| ⟹ |s|=|S0|
+0<n≤i≤|s| ∧ i>n ≡ 1≤n<i≤|s| ⟹ 1<i≤|s| ≡ 0<i-1≤|s|-1 ≡ 1≤i-1<|s|
+
+0<n≤i≤|s| ∧ i>n ≡ 1≤n<i≤|s| ⟹ n<i ≡ n-1<i-1 ≡ n≤i-1
+
+(∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k]))
+≡ (∀k:ℤ)(0≤k<i-1 ⟹L s[k]=S0[k])) ∧ s[i-1]=S0[i-1]
+⟹ (∀k:ℤ)(0≤k<i-1 ⟹L s[k]=S0[k]))
+
+((∀k:ℤ)(i≤k<|s| ⟹L s[k]=S0[k−1])
+≡ ((∀k:ℤ)(i-1<k<|s| ⟹L s[k]=S0[k−1])
+⟹ ((∀k:ℤ)(i-1<k<|s| ⟹L s[k]=S0[k−1])
+
+(∀k:ℤ)(0≤k<i ⟹L s[k]=S0[k]))
+≡ (∀k:ℤ)(0≤k<i-2 ⟹L s[k]=S0[k])) ∧ s[i-1]=S0[i-1] ∧ s[i-2]=S0[i-2]
+⟹ s[i-2]=S0[i-2]

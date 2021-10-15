@@ -1,0 +1,19 @@
+proc sacarAlDeMasSupermínimos(inout s: seq<seq<ℤ>>, out res: ℤ) {
+    Pre {
+        |s|>0
+        ∧ s=S0
+    }
+    Post {
+        |s|=|S0|-1
+        ∧ 0≤res<|S0|
+        ∧L (∀i:ℤ)(0≤i<|S0| ⟹L cantidadDeSupermínimos(S0, res) ≥ cantidadDeSupermínimos(S0, i))
+        ∧ subseq(s, 0, res) = subseq(S0, 0, res)
+        ∧ subseq(s, res, |s|) = subseq(S0, res+1, |S0|)
+    }
+}
+
+aux cantidadDeSupermínimos(s: seq<ℤ>, i: ℤ) = ∑(j=0..|s[i]|-1) if esMinimo(s[i][j], s) then 1 else 0;
+
+pred esMinimo(x: ℤ, s: seq<seq<ℤ>>) {
+    (∀i,j:ℤ)(0≤i<|s| ∧L 0≤j<|s[i]| ⟹L x≤s[i][j])
+}

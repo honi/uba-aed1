@@ -4,7 +4,7 @@ pred menorLex(s: seq<ℤ>, t: seq<ℤ>) {
     (∃k: ℤ)(
         k≤|s| ∧ k≤|t|
         ∧L mismosKElementos(s, t, k)
-        ∧ (|s|=k ∨ s[k]<t[k])
+        ∧ (|s|=k ∨L (k<|t| ∧L s[k]<t[k]))
     )
 }
 

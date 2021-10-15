@@ -8,3 +8,5 @@ Cursada: 2do cuatrimestre 2021 (virtual)
 - Parciales resueltos
   - [AED1-P1-2021-06-28](Parciales/AED1-P1-2021-06-28)
   - [AED1-P1-2021-05-19](Parciales/AED1-P1-2021-05-19)
+  - [AED1-P1-2020-11-27](Parciales/AED1-P1-2020-11-27)
+  - [AED1-P1-2020-10-21](Parciales/AED1-P1-2020-10-21)

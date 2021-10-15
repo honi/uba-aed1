@@ -1,0 +1,47 @@
+Pc : { i=0 ∧ result=true }
+
+while (i < s.size()) do
+    i := i+1;
+    result := result && (s[i-1] != 7);
+endwhile
+
+Qc : { result=true ⟺ (∀k: ℤ)(0≤k<|s| ⟹L s[k]≠7) }
+
+I : { i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) }
+
+S1 ≡ i := i+1;
+S2 ≡ result := result && (s[i-1] != 7);
+S ≡ S1;S2
+B ≡ i<|s|
+
+(I ∧ ¬B) ⟹ Qc
+{I ∧ B} S {I}
+
+wp(S, I) ≡ wp(S1, wp(S2, I))
+
+wp(S2, I)
+≡ 0≤i-1<|s| ∧L i≤|s| ∧ (result && (s[i-1] != 7))=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
+
+wp(S1, wp(S2, I))
+≡ 0≤i+1-1<|s| ∧L i+1≤|s| ∧ (result && (s[i+1-1] != 7))=true ⟺ (∀k: ℤ)(0≤k<i+1 ⟹L s[k]≠7)
+≡ 0≤i<|s| ∧L (result && (s[i] != 7))=true ⟺ (∀k: ℤ)(0≤k<i+1 ⟹L s[k]≠7)
+≡ 0≤i<|s| ∧L (result=true ∧ (s[i] != 7)=true) ⟺ (∀k: ℤ)(0≤k<i+1 ⟹L s[k]≠7)
+≡ 0≤i<|s| ∧L (result=true ∧ s[i]≠7) ⟺ (∀k: ℤ)(0≤k<i+1 ⟹L s[k]≠7)
+≡ 0≤i<|s| ∧L (result=true ∧ s[i]≠7) ⟺ ((∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ s[i]≠7)
+
+
+qvq I ∧ B ⟹ wp(S, I)
+
+I ∧ B
+≡ i≤|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ i<|s|
+≡ i<|s| ∧ result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
+
+i<|s| ⟹ 0≤i<|s|
+
+// Q ≡ result=true
+// R ≡ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7)
+// P ≡ s[i]≠7
+// (Q ⟺ R) ⟹ (P ∧ Q ⟺ P ∧ R)
+// Obs: Q ∧ R ≡ I ∧ B
+result=true ⟺ (∀k: ℤ)(0≤k<i ⟹L s[k]≠7) // En (I ∧ B)
+    ⟹ (result=true ∧ s[i]≠7) ⟺ ((∀k: ℤ)(0≤k<i ⟹L s[k]≠7) ∧ s[i]≠7) // En wp(S, I)
