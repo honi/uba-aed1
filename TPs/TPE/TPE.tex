@@ -1,0 +1,721 @@
+\input{Algo1Macros}
+\usepackage{caratula}
+\usepackage{enumerate}
+\usepackage{hyperref}
+
+\decimalpoint
+\setlength{\parskip}{0.5em}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\setcounter{tocdepth}{3}
+
+\newcommand{\ephh}{$eph_h$}
+\newcommand{\ephi}{$eph_i$}
+\newcommand{\dato}{$dato$}
+\newcommand{\hogar}{$hogar$}
+\newcommand{\individuo}{$individuo$}
+\newcommand{\joinHI}{$joinHI$}
+\newcommand{\tab}{~ \qquad}
+\newcommand{\enum}[2]{
+    {\noindent\normalfont\bfseries\ttfamily enum}
+    {\normalfont\ttfamily #1}
+    \{ \\
+        $\tab$ {\normalfont\ttfamily #2} \\
+    \}
+}
+\newcommand{\ord}[1]{ord(\text{\normalfont\ttfamily #1})}
+
+\begin{document}
+
+\titulo{Trabajo Práctico de Especificación (TPE)}
+\subtitulo{Análisis Habitacional Argentino}
+\fecha{\today}
+\materia{Algoritmos y Estructuras de Datos 1}
+\grupo{Grupo 2}
+\integrante{Valentina Durán}{974/21}{valentinad01@gmail.com}
+\integrante{Rafael Romani}{775/21}{rafaromani243@gmail.com}
+\integrante{Jonathan Bekenstein}{348/11}{jbekenstein@dc.uba.ar}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Ejercicios}
+
+\subsection{Primera parte}
+
+\subsubsection{Ejercicio 1: esEncuestaValida}
+
+\begin{proc}{esEncuestaValida}{\In th: \ephh, \In ti: \ephi, \Out result: \bool}{}
+    \pre{True}
+    \post{result = true \leftrightarrow encuestaValida(th, ti)}
+\end{proc}
+
+\pred{encuestaValida}{th: \ephh, ti: \ephi}{
+    tablaHogaresValida(th) \land tablaIndividuosValida(ti) \yLuego tablasRelacionadasDeFormaValida(th, ti)
+}
+
+\pred{tablaHogaresValida}{th: \ephh}{
+    esMatrizNoVacia(th) \\
+    \land tieneNCantidadDeColumnas(th, 12) \\
+    \yLuego sinHogaresRepetidos(th) \\
+    \land suficientesHabitacionesParaDormir(th) \\
+    \land todosLosAtributosCategoricosDeTodosLosHogaresEnRango(th)
+}
+
+\pred{tablaIndividuosValida}{ti: \ephi}{
+    esMatrizNoVacia(ti) \\ 
+    \land tieneNCantidadDeColumnas(ti, 11) \\
+    \yLuego sinIndividuosRepetidos(ti) \\
+    \land menosIndividuosPorHogar(ti, 20) \\ 
+    \land todosLosAtributosCategoricosDeTodosLosIndividuosEnRango(ti)
+}
+
+\pred{tablasRelacionadasDeFormaValida}{th: \ephh, ti: \ephi}{
+    individuosYHogaresRelacionados(th, ti) \\
+    \land  todoLosRegistrosConMismoA\text{ñ}oYTrimestre(th, ti)
+}
+
+\pred{sinHogaresRepetidos}{th: \ephh}{
+    (\forall i: \ent)(0 \leq i < |th| \implicaLuego \lnot(\exists j: \ent)(0 \leq j < |th| \land i \neq j \yLuego th[i][\ord{HOGCODUSU}] = th[j][\ord{HOGCODUSU}]))
+}
+
+\pred{sinIndividuosRepetidos}{ti: \ephi}{
+    (\forall i: \ent)(0 \leq i < |ti| \implicaLuego \lnot(\exists j: \ent)( \\
+        \tab 0 \leq j < |ti| \land i \neq j \\
+        \tab \yLuego ti[i][\ord{INDCODUSU}] = ti[j][\ord{INDCODUSU}] \\
+        \tab \land ti[i][\ord{COMPONENTE}] = ti[j][\ord{COMPONENTE}] \\
+    ))
+}
+
+\newpage
+
+\pred{todoLosRegistrosConMismoA\text{ñ}oYTrimestre}{th: \ephh, ti: \ephi}{
+    todasLasFilasConElMismoValor(th, \ord{HOGAÑO}) \\
+    \land todasLasFilasConElMismoValor(ti, \ord{INDAÑO}) \\
+    \land todasLasFilasConElMismoValor(th, \ord{HOGTRIMESTRE}) \\
+    \land todasLasFilasConElMismoValor(ti, \ord{INDTRIMESTRE}) \\
+    \land th[0][\ord{HOGAÑO}] = ti[0][\ord{INDAÑO}] \\
+    \land th[0][\ord{HOGTRIMESTRE}] = ti[0][\ord{INDTRIMESTRE}]
+}
+
+\pred{menosIndividuosPorHogar}{ti: \ephi, cota: \ent}{
+    (\forall i: individuo)(i \in ti \implicaLuego i[\ord{COMPONENTE}] \leq cota)
+}
+
+\pred{suficientesHabitacionesParaDormir}{th: \ephh}{
+    (\forall h: hogar)(h \in th \implicaLuego cantidadDeHabitaciones(h) \geq cantidadDeHabitacionesParaDormir(h))
+}
+
+\pred{todosLosAtributosCategoricosDeTodosLosHogaresEnRango}{th: \ephh}{
+    (\forall h: hogar)(h \in th \implicaLuego todosLosAtributosCategoricosDeUnHogarEnRango(h))
+}
+
+\pred{todosLosAtributosCategoricosDeTodosLosIndividuosEnRango}{ti: \ephi}{
+    (\forall i: individuo)(i \in ti \implicaLuego todosLosAtributosCategoricosDeUnIndividuoEnRango(i))
+}
+
+\pred{todosLosAtributosCategoricosDeUnHogarEnRango}{h: \hogar}{
+    codigoHogarValido(h[\ord{HOGCODUSU}]) \\
+    \land trimestreValido(h[\ord{HOGTRIMESTRE}]) \\
+    \land regimenDeTenenciaDeHogarValido(h[\ord{II7}]) \\
+    \land regionValido(h[\ord{REGION}]) \\
+    \land poblacionMasDe500kValido(h[\ord{MAS\_500}]) \\
+    \land tipoDeHogarValido(h[\ord{IV1}]) \\
+    \land cantidadDeAmbientesValido(h[\ord{IV2}]) \\
+    \land cantidadDeAmbientesParaDormirValido(h[\ord{II2}]) \\
+    \land utilizaAmbienteParaTrabajarValido(h[\ord{II3}])
+}
+
+\pred{todosLosAtributosCategoricosDeUnIndividuoEnRango}{i: \individuo}{
+    codigoHogarValido(i[\ord{INDCODUSU}]) \\
+    \land componenteValido(i[\ord{COMPONENTE}]) \\
+    \land trimestreValido(i[\ord{INDTRIMESTRE}]) \\
+    \land generoValido(i[\ord{CH4}]) \\
+    \land edadValido(i[\ord{CH6}]) \\
+    \land estudiosUniversitariosCompletosValido(i[\ord{NIVEL\_ED}]) \\
+    \land condicionDeActividadValido(i[\ord{ESTADO}]) \\
+    \land categoriaOcupacionalValido(i[\ord{CAT\_OCUP}]) \\
+    \land montoDeIngresoIndividualValido(i[\ord{P47T}]) \\
+    \land lugarDondeRealizaTareasValido(i[\ord{PP04G}])
+}
+
+\subsubsection{Ejercicio 2: histHabitacional}
+
+\begin{proc}{histHabitacional}{\In th: \ephh, \In ti: \ephi, \In region: \dato, \Out res: \TLista{\ent}}{}
+    \pre{encuestaValida(th, ti)}
+    \post{ \\
+        \tab hayCasasEnLaUltimaPosicionDelHistograma(res) \\
+        \tab \land cadaPosicionDelHistogramaTieneLaCantidadCorrectaDeCasas(th, region, res) \\
+        \tab \land noHayCasasConMasHabitacionesQueElMaximoDelHistograma(th, region, |res|-1) \\
+    }
+\end{proc}
+
+\pred{hayCasasEnLaUltimaPosicionDelHistograma}{hist: \TLista{\ent}}{
+    |hist| > 0 \implicaLuego hist[|hist|-1] \geq 1
+}
+
+\ 
+
+\pred{cadaPosicionDelHistogramaTieneLaCantidadCorrectaDeCasas}{th: \ephh, region: \dato, res: \TLista{\ent}}{
+    (\forall n: \ent) (0 \leq n < |res| \implicaLuego res[n] = cantidadDeCasasEnLaRegionConNHabitaciones(th, region, n))
+}
+
+\pred{noHayCasasConMasHabitacionesQueElMaximoDelHistograma}{th: \ephh, region: \dato, maxHabitaciones: \ent}{
+    \lnot(\exists h: hogar)(h \in th \yLuego estaEnLaRegion(h, region) \land cantidadDeHabitaciones(h) > maxHabitaciones)
+}
+
+\aux{cantidadDeCasasEnLaRegionConNHabitaciones}{th: \ephh, region: \dato, n: \ent}{\ent}{ \\
+    \tab \#\{ h \in th : esCasaEnLaRegionConNHabitaciones(h, region, n) \}
+}
+
+\pred{esCasaEnLaRegionConNHabitaciones}{h: \hogar, region: \dato, n: \ent}{
+    esCasa(h) \\
+    \land estaEnLaRegion(h, region) \\
+    \land cantidadDeHabitaciones(h) = n
+}
+
+\subsubsection{Ejercicio 3: laCasaEstaQuedandoChica}
+
+\begin{proc}{laCasaEstaQuedandoChica}{\In th: \ephh, \In ti: \ephi, \Out res: \TLista{\ent}}{}
+    \pre{encuestaValida(th, ti)}
+    \post{ \\
+        \tab |res| = 6 \\
+        \tab \land (\forall i: \ent)(0 \leq i < |res| \implicaLuego res[i] = proporcionDeCasasConHacinamientoCritico(th, ti, i+1)) \\
+    }
+\end{proc}
+
+\newpage
+
+\aux{proporcionDeCasasConHacinamientoCritico}{th: \ephh, ti: \ephi, region: \dato}{\float}{ \\
+    \tab \IfThenElse{cantidadDeCasasDePuebloEnLaRegion(th, region) = 0}{ \\
+        \tab\tab 0 \\ \tab
+    }{ \\
+        \tab\tab \frac{cantidadDeCasasDePuebloEnLaRegionConHacinamientoCritico(th, ti, region)}{cantidadDeCasasDePuebloEnLaRegion(th, region)} \\ \tab
+    }
+}
+
+\aux{cantidadDeCasasDePuebloEnLaRegionConHacinamientoCritico}{th: \ephh, ti: \ephi, region: \dato}{\ent}{ \\
+    \tab \#\{h \in th : esCasaDePuebloEnLaRegionConHacinamientoCritico(ti, h, region)\}
+}
+
+\aux{cantidadDeCasasDePuebloEnLaRegion}{th: \ephh, region: \dato}{\ent}{ \\
+    \tab \#\{h \in th : esCasaDePuebloEnLaRegion(h, region)
+\}}
+
+\pred{esCasaDePuebloEnLaRegionConHacinamientoCritico}{ti: \ephi, h: \hogar, region: \dato}{
+    esCasaDePuebloEnLaRegion(h, region) \land conHacinamientoCritico(h, ti)
+}
+
+\pred{esCasaDePuebloEnLaRegion}{h: \hogar, region: \dato}{             
+    esCasa(h) \land poblacionMenosDe500k(h) \land estaEnLaRegion(h, region)
+}
+
+\ 
+
+\pred{conHacinamientoCritico}{h: \hogar, ti: \ephi}{
+    cantidadDeHabitacionesParaDormir(h) = 0 \lor 3 < \frac{cantidadDeConvivientes(h,ti)}{cantidadDeHabitacionesParaDormir(h)}
+}
+
+\subsubsection{Ejercicio 4: creceElTeleworkingEnCiudadesGrandes}
+
+\begin{proc}{creceElTeleworkingEnCiudadesGrandes}{\In t1h: \ephh, \In t1i: \ephi, \In t2h: \ephh, \In t2i: \ephi, \Out res: \bool}{}
+    \pre{ \\
+        \tab encuestaValida(t1h, t1i) \land encuestaValida(t2h, t2i) \\
+        \tab \yLuego primerEncuestaEsAnteriorALaSegunda(t1h, t2h) \\
+        \tab \land sonEncuestasDelMismoTrimestre(t1h, t2h) \\
+    }
+    \post{res = true \leftrightarrow proporcionTeleworking(t2h, t2i) > proporcionTeleworking(t1h, t1i)}
+\end{proc}
+
+\pred{primerEncuestaEsAnteriorALaSegunda}{t1h: \ephh, t2h: \ephh}{
+    t1h[0][\ord{HOGAÑO}] < t2h[0][\ord{HOGAÑO}]
+}
+
+\pred{sonEncuestasDelMismoTrimestre}{t1h: \ephh, t2h: \ephh}{
+    t1h[0][\ord{HOGTRIMESTRE}] = t2h[0][\ord{HOGTRIMESTRE}]
+}
+
+\newpage
+
+\aux{proporcionTeleworking}{th: \ephh, ti: \ephi}{\float}{ \\
+    \tab \IfThenElse{cantidadTotalValidoParaTeleworking(th, ti) = 0}{ \\
+        \tab\tab 0 \\ \tab
+    }{ \\
+        \tab\tab \frac{cantidadTeleworking(th, ti)}{cantidadTotalValidoParaTeleworking(th, ti)} \\ \tab
+    }
+}
+
+\aux{cantidadTeleworking}{th: \ephh, ti: \ephi}{\ent}{
+    \#\{ \\
+        \tab i \in ti : tieneTrabajo(i) \land tieneHogarValidoParaTeleworking(th, i[\ord{INDCODUSU}]) \\
+        \tab\tab \land tieneLugarDeTrabajo(th, i[\ord{INDCODUSU}]) \\
+        \tab\tab \land trabajaEnElHogar(i) \\
+    \}
+}
+
+\aux{cantidadTotalValidoParaTeleworking}{th: \ephh, ti: \ephi}{\ent}{ \\
+    \tab \#\{i \in ti : tieneTrabajo(i) \land tieneHogarValidoParaTeleworking(th, i[\ord{INDCODUSO}]) \}
+}
+
+\pred{tieneTrabajo}{i: \individuo}{
+    i[\ord{ESTADO}] = 1
+}
+ 
+\pred{tieneHogarValidoParaTeleworking}{th: \ephh, codigoHogar: \dato}{
+    (\exists h: hogar)(h \in th \yLuego h[\ord{HOGCODUSU}] = codigoHogar \land poblacionMasDe500k(h) \land (esCasa(h) \lor esDepto(h)))
+}
+
+\pred{tieneLugarDeTrabajo}{th: \ephh, codigoHogar: \dato}{
+    (\exists h: hogar)(h \in th \yLuego h[\ord{HOGCODUSU}] = codigoHogar \land h[\ord{II3}] = 1)
+}
+
+\pred{trabajaEnElHogar}{i: \individuo}{
+    i[\ord{PP04G}] = 6
+}
+
+
+\subsubsection{Ejercicio 5: costoSubsidioMejora}
+
+\begin{proc}{costoSubsidioMejora}{\In th: \ephh, \In ti: \ephi, \In monto: \ent, \Out res: \ent}{}
+    \pre{encuestaValida(th, ti) \land monto > 0}
+    \post{res = monto * cantidadDeHogaresSubsidiados(th, ti)}
+\end{proc}
+
+\aux{cantidadDeHogaresSubsidiados}{th: \ephh, ti: \ephi}{\ent}{
+    \#\{h \in th : cumpleRequisitosParaSubsidio(h, ti) \}
+}
+
+\pred{cumpleRequisitosParaSubsidio}{h: \hogar, ti: \ephi}{
+    esCasa(h) \land tenenciaPropia(h) \land cantidadDeHabitacionesParaDormir(h) < cantidadDeConvivientes(h, ti) - 2
+}
+
+\subsection{Segunda parte}
+
+\subsubsection{Ejercicio 6: generarJoin}
+
+\begin{proc}{generarJoin}{\In th: \ephh, \In ti: \ephi, \Out junta: \joinHI}{}
+    \pre{encuestaValida(th, ti)}
+    \post{|junta| = |ti| \land (\forall i : individuo)(i \in ti \implicaLuego existeTuplaHogarIndividuo(i, th, junta))}
+\end{proc}
+
+\pred{existeTuplaHogarIndividuo}{i: \individuo, th: \ephh, junta: \joinHI}{
+    (\exists tupla : \hogar \times \individuo)(tupla \in junta \land (tupla)_0 \in th \land (tupla)_1 = i \yLuego viveEnElHogar((tupla)_0, (tupla)_1)
+}
+
+
+\subsubsection{Ejercicio 7: ordenarRegionYTipo}
+
+\begin{proc}{ordenarRegionYTipo}{\Inout th: \ephh, \Inout ti: \ephi}{}
+    \pre{encuestaValida(th, ti) \land th = TH_0 \land ti = TI_0}
+    \post{ \\
+        \tab esPermutacion(th, TH_0) \\
+        \tab \land esPermutacion(ti, TI_0) \\
+        \tab \land losHogaresEstanOrdenados(th) \\
+        \tab \land losIndividuosEstanOrdenados(th, ti) \\
+    }
+\end{proc}
+
+\ 
+
+\pred{losHogaresEstanOrdenados}{th: \ephh}{
+    (\forall i : \ent)(0 \leq i < |th|-1 \implicaLuego \\
+        \tab ordenadoPorRegion(th[i], th[i+1]) \\
+        \tab \lor ordenadoPorCodigoEnLaMismaRegion(th[i], th[i+1]) \\
+    )
+}
+
+\pred{losIndividuosEstanOrdenados}{th: \ephh, ti: \ephi}{
+    (\forall i : \ent)(0 \leq i < |ti|-1 \implicaLuego \\
+        \tab ordenadoPorCodigoHogar(th, ti[i], ti[i+1]) \\
+        \tab \lor ordenadoPorComponenteEnElMismoHogar(ti[i], ti[i+1]) \\
+    )
+}
+
+\pred{ordenadoPorRegion}{h1: \hogar, h2: \hogar}{
+    h1[\ord{REGION}] < h2[\ord{REGION}]
+}
+
+\pred{ordenadoPorCodigoEnLaMismaRegion}{h1: \hogar, h2: \hogar}{
+    mismaRegion(h1, h2) \land h1[\ord{HOGCODUSU}] < h2[\ord{HOGCODUSU}]
+}
+
+\newpage
+
+\pred{ordenadoPorCodigoHogar}{th: \ephh, i1: \individuo, i2: \individuo}{
+    |th| = 1 \lor
+    (\exists j_1, j_2 : \ent)(0 \leq j_1 < j_2 < |th| \yLuego viveEnElHogar(th[j_1], i1) \land viveEnElHogar(th[j_2], i2))
+}   
+
+\pred{ordenadoPorComponenteEnElMismoHogar}{i1: \individuo, i2: \individuo}{
+    mismoHogar(i1, i2) \land i1[\ord{COMPONENTE}] < i2[\ord{COMPONENTE}]
+}
+
+\subsubsection{Ejercicio 8: muestraHomogenea}
+
+\begin{proc}{muestraHomogenea}{\In th: \ephh, \In ti: \ephi, \Out res: \TLista{\hogar}}{}
+    \pre{encuestaValida(th, ti)}
+    \post{ \\
+        \tab (|res| \geq 3 \land esMuestraHomogenea(th, ti, res) \land esLaMuestraHomogeneaMasGrande(th, ti, res)) \\
+        \tab \lor (|res| = 0 \land \lnot (\exists muestra: \TLista{\hogar})(esMuestraHomogenea(th, ti, muestra) \land |muestra| \geq 3)) \\
+    }
+\end{proc}
+
+\pred{esMuestraHomogenea}{th: \ephh, ti: \ephi, muestra: \TLista{\hogar}}{
+    estaIncluida(th, muestra) \\
+    \yLuego ordenadoPorIngresos(ti, muestra) \\
+    \land diferenciaDeIngresosConstante(ti, muestra)
+}
+
+
+\pred{esLaMuestraHomogeneaMasGrande}{th: \ephh, ti: \ephi, muestra: \TLista{\hogar}}{
+    \lnot(\exists otraMuestra: \TLista{\hogar})(esMuestraHomogenea(otraMuestra) \land |otraMuestra| > |muestra|)
+}
+
+\pred{ordenadoPorIngresos}{ti: \ephi, hogares: \TLista{\hogar}}{
+    (\forall i : \ent)(0 \leq i < |hogares|-1 \implicaLuego ingresosDelHogar(ti, hogares[i]) \leq ingresosDelHogar(ti, hogares[i+1]))
+}
+
+\pred{diferenciaDeIngresosConstante}{ti: \ephi, hogares: \TLista{\hogar}}{
+    (\forall i : \ent)(1 \leq i < |hogares|-1 \implicaLuego \\
+        \tab diferenciaDeIngresosConElSiguiente(ti, hogares, i) = diferenciaDeIngresosConElSiguiente(ti, hogares, 0) \\
+    )
+}
+
+\aux{ingresosDelHogar}{ti: \ephi, hogar: \hogar}{\ent}{ \\
+    \tab \sum_{i=0}^{|ti|-1} \IfThenElse{viveEnElHogar(hogar, ti[i]) \land ingresos(ti[i]) > 0}{ingresos(ti[i])}{0}
+}
+
+\aux{diferenciaDeIngresosConElSiguiente}{ti: \ephi, hogares: \TLista{\hogar}, i: \ent}{\ent}{ \\
+    \tab ingresosDelHogar(ti, hogares[i+1]) - ingresosDelHogar(ti, hogares[i])
+}
+
+\newpage
+
+\subsubsection{Ejercicio 9: corregirRegion}
+
+\begin{proc}{corregirRegion}{\Inout th: \ephh, \In ti: \ephi}{}
+    \pre{encuestaValida(th, ti) \land th = TH_0}
+    \post{ \\
+        \tab |th| = |TH_0| \\
+        \tab \land (\forall h: \hogar)(h \in TH_0 \implicaLuego hogarDeGranBuenosAiresAPampeana(th, h) \lor hogarSinModificacion(th, h)) \\
+        \tab \land losHogaresMantienenElMismoOrden(th, TH_0) \\
+    }
+\end{proc}
+
+\pred{hogarDeGranBuenosAiresAPampeana}{th: \ephh, h: \hogar}{
+    estaEnLaRegion(h, \ord{GRAN\_BUENOS\_AIRES}) \land setAt(h, \ord{REGION}, \ord{PAMPEANA}) \in th
+}
+
+\pred{hogarSinModificacion}{th: \ephh, h: \hogar}{
+    \lnot estaEnLaRegion(h, \ord{GRAN\_BUENOS\_AIRES}) \land h \in th
+}
+
+\pred{losHogaresMantienenElMismoOrden}{th1: \ephh, th2: \ephh}{
+    (\forall i : \ent)(0 \leq i < |th1| \implicaLuego th1[i][\ord{HOGCODUSU}] = th2[i][\ord{HOGCODUSU}])
+}
+
+\subsubsection{Ejercicio 10: histogramaDeAnillosConcentricos}
+
+\begin{proc}{histogramaDeAnillosConcentricos}{\In th: \ephh, \In centro: $\mathbb{Z} \times \mathbb{Z}$, \In distancias: \TLista{\ent}, \Out result: \TLista{\ent}}{}
+    \pre{ tablaHogaresValida(th) \land |distancias| > 0 \land esEstrictamenteCreciente(distancias)}
+    \post{ \\
+        \tab |res| = |distancias| \\
+        \tab \yLuego res[0] = cantidadDeCasasDentroDeLaCircunferencia(th, centro, distancias[0]) \\
+        \tab \land (\forall i : \ent)(1 \leq i < |distancias| \implicaLuego res[i] = cantidadDeCasasEnElAnillo(th, centro, distancias[i - 1], distancias[i])) \\
+    }
+\end{proc}
+
+\aux{cantidadDeCasasEnElAnillo}{th: \ephh, centro: $\mathbb{Z} \times \mathbb{Z}$, radioInterno: \ent, radioExterno: \ent}{\ent}{ \\
+    \tab cantidadDeCasasDentroDeLaCircunferencia(th, centro, radioExterno) \\
+    \tab - cantidadDeCasasDentroDeLaCircunferencia(th, centro, radioInterno)
+}
+
+\aux{cantidadDeCasasDentroDeLaCircunferencia}{th: \ephh, centro: $\mathbb{Z} \times \mathbb{Z}$, radio: \ent}{\ent}{ \\
+    \tab \#\{ h \in th : distanciaEntrePuntos((centro)_0, (centro)_1, h[\ord{HOGLATITUD}], h[\ord{HOGLONGITUD}]) \leq cuadrado(radio) \}
+}
+
+\aux{distanciaEntrePuntos}{x1: \ent, y1: \ent, x2: \ent, y2: \ent}{\ent}{
+    cuadrado(x1 - x2) + cuadrado(y1 - y2)
+}
+
+\newpage
+
+\subsubsection{Ejercicio 11: quitarIndividuos}
+
+\begin{proc}{quitarIndividuos}{\Inout th: \ephh, \Inout ti: \ephi, \In busqueda: \TLista{(ItemIndividuo, dato)}, \Out result: (\ephh, \ephi)}{}
+    \pre{ \\
+        \tab encuestaValida(th, ti) \\
+        \tab \land busquedaValida(busqueda) \\
+        \tab \land th = TH_0 \\
+        \tab \land ti = TI_0 \\
+    }
+    \post{ \\
+        \tab losIndividuosEncontradosEstanEnLaSalida(TI_0, busqueda, (result)_1) \\
+        \tab \land individuosYHogaresRelacionados((result)_0, (result)_1) \\
+        \tab \land noFaltanNiSobranElementosRespectoALaEntrada(TH_0, th, (result)_0) \\
+        \tab \land noFaltanNiSobranElementosRespectoALaEntrada(TI_0, ti, (result)_1) \\
+    }
+\end{proc}
+
+\pred{busquedaValida}{busqueda: \TLista{(ItemIndividuo, dato)}}{
+    todosLosValoresBuscadosSonValidos(busqueda) \land sinItemIndividuoRepetidos(busqueda)
+}
+
+\pred{todosLosValoresBuscadosSonValidos}{busqueda: \TLista{(ItemIndividuo, dato)}}{
+    (\forall i: \ent)(0 \leq i < |busqueda| \implicaLuego valorValidoParaElItemAsociado((busqueda[i])_0, (busqueda[i])_1))
+}
+
+\pred{sinItemIndividuoRepetidos}{busqueda: \TLista{(ItemIndividuo, dato)}}{
+    (\forall i: \ent)(0 \leq i < |busqueda| \implicaLuego \lnot(\exists j: \ent)(0 \leq j < |busqueda| \land i \neq j \yLuego (busqueda[i])_0 = (busqueda[j])_0))
+}
+
+
+\pred{valorValidoParaElItemAsociado}{item: ItemIndividuo, valor: \dato}{
+    (item = INDCODUSU \land codigoHogarValido(valor)) \\
+    \lor (item = COMPONENTE \land componenteValido(valor)) \\
+    \lor (item = INDTRIMESTRE \land trimestreValido(valor)) \\
+    \lor (item = CH4 \land generoValido(valor)) \\
+    \lor (item = CH6 \land edadValido(valor)) \\
+    \lor (item = NIVEL\_ED \land estudiosUniversitariosCompletosValido(valor)) \\
+    \lor (item = ESTADO \land condicionDeActividadValido(valor)) \\
+    \lor (item = CAT\_OCUP \land categoriaOcupacionalValido(valor)) \\
+    \lor (item = P47T \land montoDeIngresoIndividualValido(valor)) \\
+    \lor (item = PP04G \land lugarDondeRealizaTareasValido(valor))
+}
+
+
+\pred{losIndividuosEncontradosEstanEnLaSalida}{ti: \ephi, busqueda: \TLista{(ItemIndividuo, dato)}, result: \ephi}{
+    (\forall i: individuo)(i \in ti \yLuego coincideConLaBusqueda(i, busqueda) \leftrightarrow i \in result)
+}
+
+\pred{noFaltanNiSobranElementosRespectoALaEntrada}{entrada: \TLista{T}, salida: \TLista{T}, resultados: \TLista{T}}{
+    esPermutacion(entrada, salida ++ resultados)
+}
+
+\newpage
+
+\pred{coincideConLaBusqueda}{individuo: \individuo, busqueda: \TLista{(ItemIndividuo, dato)}}{
+    (\forall i: \ent)(0 \leq i < |busqueda| \implicaLuego coincideConUnItemDeLaBusqueda(individuo, (busqueda[i])_0, (busqueda[i])_1))
+}
+
+\pred{coincideConUnItemDeLaBusqueda}{individuo: \individuo, item: ItemIndividuo, valor: \dato}{
+    individuo[ord(item)] = valor
+}
+
+
+
+\section{Predicados y auxiliares generales}
+
+\subsection{Enums}
+
+\enum{ItemHogar}{
+    HOGCODUSU, HOGAÑO, HOGTRIMESTRE, HOGLATITUD, HOGLONGITUD, II7, REGION, MAS\_500, IV1, IV2, II2, II3
+}
+
+\enum{ItemIndividuo}{
+    INDCODUSU, COMPONENTE, INDAÑO, INDTRIMESTRE, CH4, CH6, NIVEL\_ED, ESTADO, CAT\_OCUP, P47T, PP04G
+}
+
+\enum{TiposDeHogar}{
+    SIN\_DATO, CASA, DEPARTAMENTO, PIEZA\_DE\_INQUILINATO, PIEZA\_EN\_HOTEL, LOCAL
+}
+
+\enum{Regiones}{
+    SIN\_DATO, GRAN\_BUENOS\_AIRES, NOA, NEA, CUYO, PAMPEANA, PATAGONIA
+}
+
+
+\subsection{Predicados}
+
+\pred{cantidadDeAmbientesParaDormirValido}{valor: \dato}{
+    0 \leq valor
+}
+
+\pred{cantidadDeAmbientesValido}{valor: \dato}{
+    1 \leq valor
+}
+
+\pred{categoriaOcupacionalValido}{valor: \dato}{
+    0 \leq valor \leq 4
+}
+
+\pred{codigoHogarValido}{valor: \dato}{
+    1 \leq valor
+}
+
+\newpage
+
+\pred{componenteValido}{valor: \dato}{
+    1 \leq valor
+}
+
+\pred{condicionDeActividadValido}{valor: \dato}{
+    -1 \leq valor \leq 1
+}
+
+\pred{edadValido}{valor: \dato}{
+    0 \leq valor
+}
+
+\pred{esCasa}{h: \hogar}{
+    h[\ord{IV1}] = \ord{CASA}
+}
+
+\pred{esDepto}{h: \hogar}{
+    h[\ord{IV1}] = \ord{DEPARTAMENTO}
+}
+
+\pred{esEstrictamenteCreciente}{s: \TLista{\ent}}{
+    (\forall i : \ent)(0 \leq i < |s|-1 \implicaLuego s[i] < s[i+1])
+}
+
+\pred{esMatriz}{m: \matriz{\ent}}{
+    (\forall i: \ent)(0 \leq i < |m| \implicaLuego |m[i]| > 0 \land |m[i]| = |m[0]|)
+}
+
+
+\pred{esMatrizNoVacia}{m: \matriz{\ent}}{
+    esMatriz(m) \land |m| > 0
+}
+
+\pred{esPermutacion}{l1: \TLista{T}, l2: \TLista{T}}{
+    (\forall e : T)(cantidadDeApariciones(l1, e) = cantidadDeApariciones(l2, e))
+}
+
+\pred{estaEnLaRegion}{h: \hogar, region: \dato}{
+    h[\ord{REGION}] = region
+}
+
+\pred{estaIncluida}{s: \TLista{T}, sub: \TLista{T}}{
+    (\forall e : T)(e \in sub \implicaLuego cantidadDeApariciones(sub, e) \leq cantidadDeApariciones(s, e))
+}
+
+\pred{estudiosUniversitariosCompletosValido}{valor: \dato}{
+    0 \leq valor \leq 1
+}
+
+\pred{existeFilaConUnValor}{m: \matriz{\ent}, columna: \ent, valor: \ent}{
+    (\exists i: \ent)(0 \leq i < |m| \yLuego m[i][columna] = valor)
+}
+
+\pred{generoValido}{valor: \dato}{
+    1 \leq valor \leq 2
+}
+
+\pred{individuosYHogaresRelacionados}{th: \ephh, ti: \ephi}{
+    (\forall h: hogar)(h \in th \implicaLuego existeFilaConUnValor(ti, \ord{INDCODUSU}, h[\ord{HOGCODUSU}])) \\
+    \land (\forall i: individuo)((i \in ti \implicaLuego existeFilaConUnValor(th, \ord{HOGCODUSU}, i[\ord{INDCODUSU}])))
+}
+
+\pred{lugarDondeRealizaTareasValido}{valor: \dato}{
+    1 \leq valor \leq 10
+}
+
+\pred{mismaRegion}{h1: \hogar, h2: \hogar}{
+    h1[\ord{REGION}] = h2[\ord{REGION}]
+}
+
+\pred{mismoHogar}{i1: \individuo, i2: \individuo}{
+    i1[\ord{INDCODUSU}] = i2[\ord{INDCODUSU}]
+}
+
+
+\pred{montoDeIngresoIndividualValido}{valor: \dato}{
+    -1 \leq valor
+}
+
+\pred{poblacionMasDe500k}{h: \hogar}{
+    h[\ord{MAS\_500}] = 1
+}
+
+\pred{poblacionMasDe500kValido}{valor: \dato}{
+    0 \leq valor \leq 1
+}
+
+
+\pred{poblacionMenosDe500k}{h: \hogar}{
+    h[\ord{MAS\_500}] = 0
+}
+
+
+\pred{regimenDeTenenciaDeHogarValido}{valor: \dato}{
+    1 \leq valor \leq 3
+}
+
+\newpage
+
+\pred{regionValido}{valor: \dato}{
+    1 \leq valor \leq 6
+}
+
+\pred{tenenciaPropia}{h: \hogar}{
+    h[\ord{II7}] = 1
+}
+
+\pred{tieneNCantidadDeColumnas}{m: \matriz{\ent}, n: \ent}{
+    (\forall i: \ent)(0 \leq i < |m| \implicaLuego |m[i]| = n)
+}
+
+\pred{tipoDeHogarValido}{valor: \dato}{
+    1 \leq valor \leq 5
+}
+
+\pred{trimestreValido}{valor: \dato}{
+    1 \leq valor \leq 4
+}
+
+\pred{todasLasFilasConElMismoValor}{m: \matriz{\ent}, columna: \ent}{
+    (\forall i: \ent)(0 \leq i < |m|-1 \implicaLuego m[i][columna] = m[i+1][columna])
+}
+
+\pred{utilizaAmbienteParaTrabajarValido}{valor: \dato}{
+    1 \leq valor \leq 2
+}
+
+\pred{viveEnElHogar}{h: \hogar, i: \individuo}{
+    i[\ord{INDCODUSU}] = h[\ord{HOGCODUSU}]
+}
+
+\subsection{Auxiliares}
+
+\aux{cantidadDeApariciones}{l: \TLista{T}, e: T}{\ent}{
+    \#\{x \in l : x = e \}
+}
+
+\aux{cantidadDeConvivientes}{h: \hogar, ti: \ephi}{\ent}{
+    \#\{ i \in ti : viveEnElHogar(h,i) \}
+}
+
+\aux{cantidadDeHabitaciones}{h: \hogar}{\ent}{
+    h[\ord{IV2}]
+}
+
+\aux{cantidadDeHabitacionesParaDormir}{h: \hogar}{\ent}{
+    h[\ord{II2}]
+}
+
+\aux{cuadrado}{x: \ent}{\ent}{
+    x * x
+}
+
+\aux{ingresos}{i: \individuo}{\ent}{
+    i[\ord{P47T}]
+}
+
+\section{Decisiones tomadas}
+
+\begin{itemize}
+    \item En ningún ejercicio se valida el año de los hogares o de los individuos porque no hay un criterio claro para hacerlo.
+
+    \item A falta de información se asumió que el componente de un individuo pertenece a los naturales.
+    
+    \item La edad de los individuos se consideró desde 0 para tener en cuenta a los recién nacidos.
+    
+    \item Para calcular la proporción de teleworking se consideró como individuos totales a los que viven en casas o departamentos localizados en ciudades de más de 500 mil habitantes. Y para contabilizar a los que realizan teleworking, se consideró a los individuos que realizan principalmente sus tareas en su hogar y además tienen una habitación exclusivamente para trabajar.
+    
+    \item En el ejercicio 10 se consideró como dentro del anillo a los hogares ubicados sobre el borde exterior del mismo.
+    
+    \item En el ejercicio 11 no se garantiza que la encuesta siga siendo válida luego de ejecutar el programa, pues al quitar los hogares de los individuos encontrados, existe la posibilidad de que hayan quedado individuos de ese mismo hogar en la tabla de individuos. La consigna no indica qué hacer en esta situación, y especificar que la encuesta siga siendo válida implicaría quitar individuos de la tabla de individuos que no cumplan el criterio de búsqueda, o duplicar los hogares.
+\end{itemize}
+
+\end{document}

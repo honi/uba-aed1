@@ -1,0 +1,117 @@
+i := 0;
+j := 1;
+while (j < s.size()) do
+    if (s[j]>s[i])
+        i := j
+    else
+        skip
+    endif;
+    j := j+1
+endwhile
+
+Teorema de corrección de un ciclo
+
+Pc ⟹ I
+{I ∧ B} S {I}
+I ∧ ¬B ⟹ Qc
+{I ∧ B ∧ v0 = fv} S {fv < v0}
+I ∧ fv ≤ 0 ⟹ ¬B
+
+P ≡ |s| ≥ 1
+Q ≡ 0≤i<|s| ∧L (∀j:ℤ)(0≤j<|s| ⟹L s[j]≤s[i])
+Pc ≡ P ∧ i=0 ∧ j=1 ≡ |s|≥1 ∧ i=0 ∧ j=1
+Qc ≡ Q
+I ≡ (0≤i<|s| ∧ 1≤j≤|s|) ∧L (∀k:ℤ)(0≤k<j ⟹L s[k]≤s[i])
+B ≡ j<|s|
+fv ≡ |s|-j
+
+// Pc ⟹ I
+
+Pc  ≡ |s|≥1 ∧ i=0 ∧ j=1
+    ⟹ |s|≥1 ∧ 0≤i<1 ∧ 1≤j≤1 ∧L (∀k:ℤ)(0≤k<1 ⟹L s[k]≤s[0])
+    ⟹ (0≤i<|s| ∧ 1≤j≤|s|) ∧L (∀k:ℤ)(0≤k<j ⟹L s[k]≤s[i])
+
+// {I ∧ B} S {I}
+
+I ∧ B ⟹ wp(S, I)
+
+wp(S, I) ≡ wp(S1, wp(S2, I))
+
+wp(S2, I)
+    ≡ wp(j := j+1, I)
+    ≡ def(j+1) ∧ I(j := j+1)
+    ≡ (0≤i<|s| ∧ 1≤j+1≤|s|) ∧L (∀k:ℤ)( 0≤k<j+1 ⟹L s[k]≤s[i] )
+    ≡ E2
+
+wp(S1, wp(S2, I))
+    ≡ wp(S1, E2)
+    ≡ wp(if (s[j]>s[i]) i := j else skip endif, E2)
+    ≡ def(s[j]>s[i]) ∧L ((s[j]>s[i] ∧ wp(i := j, E2)) ∨ (¬(s[j]>s[i]) ∧ wp(skip, E2)))
+    ≡ (0≤i<|s| ∧ 0≤j<|s|) ∧L ((s[j]>s[i] ∧ E2(i := j)) ∨ (s[j]≤s[i] ∧ E2))
+    ≡ (0≤i<|s| ∧ 0≤j<|s|) ∧L (
+        (s[j]>s[i] ∧ (0≤j<|s| ∧ 1≤j+1≤|s|) ∧L (∀k:ℤ)( 0≤k<j+1 ⟹L s[k]≤s[j] ))
+        ∨
+        (s[j]≤s[i] ∧ (0≤i<|s| ∧ 1≤j+1≤|s|) ∧L (∀k:ℤ)( 0≤k<j+1 ⟹L s[k]≤s[i] ))
+      )
+    // 0≤j<|s| ∧ 1≤j+1≤|s| ≡ 0≤j<|s|
+    // A su vez, saco los chequeos de rango de adentro porque ya los tengo en el primer predicado.
+    ≡ (0≤i<|s| ∧ 0≤j<|s|) ∧L (
+        (s[j]>s[i] ∧ (∀k:ℤ)( 0≤k<j+1 ⟹L s[k]≤s[j] ))
+        ∨
+        (s[j]≤s[i] ∧ (∀k:ℤ)( 0≤k<j+1 ⟹L s[k]≤s[i] ))
+      )
+    ≡ (0≤i<|s| ∧ 0≤j<|s|) ∧L (
+        (s[j]>s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[j] ) ∧ s[j]≤s[j])
+        ∨
+        (s[j]≤s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ) ∧ s[j]≤s[i])
+      )
+    ≡ (0≤i<|s| ∧ 0≤j<|s|) ∧L (
+        (s[j]>s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[j] ))
+        ∨
+        (s[j]≤s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ))
+      )
+
+        // Si j=0:
+        // (s[0]>s[i] ∧ (∀k:ℤ)( 0≤k<0 ⟹L s[k]≤s[0] ))
+        // ∨
+        // (s[0]≤s[i] ∧ (∀k:ℤ)( 0≤k<0 ⟹L s[k]≤s[i] ))
+        // ≡ (s[0]>s[i] ∧ True ∨ (s[0]≤s[i] ∧ True
+        // ≡ True
+        // Es decir, el caso j=0 siempre es True
+        // Otra forma de verlo: juntar todo en un único cuantificador ∀
+        // El caso j=0 es una tautología
+        // (0≤i<|s| ∧ 1≤j<|s|)
+        // ∧L (∀k:ℤ)( 0≤k<j ⟹L (s[j]>s[i] ∧ s[k]≤s[j]) ∨ (s[j]≤s[i] ∧ s[k]≤s[i]) )
+
+    ≡ (0≤i<|s| ∧ 1≤j<|s|) ∧L (
+        (s[j]>s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[j] ))
+        ∨
+        (s[j]≤s[i] ∧ (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ))
+      )
+
+I ∧ B
+    ≡ (0≤i<|s| ∧ 1≤j≤|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ) ∧ j<|s|
+    ≡ (0≤i<|s| ∧ 1≤j<|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] )
+
+Caso 1: s[j]>s[i]
+
+    (0≤i<|s| ∧ 1≤j<|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] )
+    ⟹ (0≤i<|s| ∧ 1≤j<|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i]<s[j] )
+    ⟹ (0≤i<|s| ∧ 1≤j<|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[j] )
+
+Caso 2: s[j]≤s[i]
+
+    (0≤i<|s| ∧ 1≤j<|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] )
+    Vale trivialmente
+
+// I ∧ ¬B ⟹ Qc
+I ∧ ¬B
+    ≡ (0≤i<|s| ∧ 1≤j≤|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ) ∧ ¬(j<|s|)
+    ≡ (0≤i<|s| ∧ 1≤j≤|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] ) ∧ j≥|s|
+    ≡ (0≤i<|s| ∧ j=|s|) ∧L (∀k:ℤ)( 0≤k<j ⟹L s[k]≤s[i] )
+    ≡ (0≤i<|s| ∧ j=|s|) ∧L (∀k:ℤ)( 0≤k<|s| ⟹L s[k]≤s[i] )
+    ⟹ Qc ≡ 0≤i<|s| ∧L (∀j:ℤ)( 0≤j<|s| ⟹L s[j]≤s[i] )
+    Vale trivialmente ya que es igual a Qc pero con otro nombre para la variable del cuantificador
+
+// {I ∧ B ∧ v0 = fv} S {fv < v0}
+// I ∧ fv ≤ 0 ⟹ ¬B

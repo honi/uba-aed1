@@ -1,0 +1,6 @@
+#ifndef AED_P2_2021_11_19_EJERCICIO3_H
+#define AED_P2_2021_11_19_EJERCICIO3_H
+
+void ejercicio3();
+
+#endif //AED_P2_2021_11_19_EJERCICIO3_H

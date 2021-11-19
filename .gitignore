@@ -5,3 +5,5 @@
 *.out
 *.synctex.gz
 *.toc
+cmake-build-debug
+venv

@@ -1,0 +1,164 @@
+Teorema de corrección de un ciclo
+
+Pc ⟹ I
+{I ∧ B} S {I}
+I ∧ ¬B ⟹ Qc
+{I ∧ B ∧ v0 = fv} S {fv < v0}
+I ∧ fv ≤ 0 ⟹ ¬B
+
+
+P ≡ True
+Q ≡ result = ∑ ᵢ₌₀ |ˢ|⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+I ≡ 0 ≤ j ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+B ≡ j < |s|
+Pc ≡ j = 0 ∧ result = 0
+Qc ≡ Q
+fv ≡ |s| - j
+
+// Pc ⟹ I
+    j = 0 ⟹ 0 ≤ j ≤ |s|
+    j = 0 ∧ result = 0 ⟹ result = ∑ ᵢ₌₀ 0⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+                           ≡ result = ∑ ᵢ₌₀ j⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+
+// {I ∧ B} S {I}
+    I ∧ B ⟹ wp(S, I)
+    wp(S, I) ≡ wp(S1, wp(S2, I))
+
+    wp(S2, I)
+        ≡ wp(j := j+1, I)
+        ≡ def(j+1) ∧L I(j : j+1)
+        ≡ 0 ≤ j+1 ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi)
+
+    wp(S1, wp(S2, I))
+        ≡ wp(
+            if (j mod 2 = 1) then result := result + s[j] else skip endif,
+            wp(S2, I)
+        )
+        ≡ def(j mod 2 = 1) ∧L (
+            (j mod 2 = 1 ∧ wp(result := result + s[j], wp(S2, I)))
+            ∨
+            (¬(j mod 2 = 1) ∧ wp(skip, wp(S2, I)))
+        )
+
+        ≡ (j mod 2 = 1 ∧ def(result + s[j]) ∧L wp(S2, I)(result : result + s[j]))
+          ∨
+          (j mod 2 = 0 ∧ wp(S2, I))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L 0 ≤ j+1 ≤ |s| ∧L result + s[j] = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ wp(S2, I))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L 0 ≤ j+1 ≤ |s| ∧L result + s[j] - s[j] = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi) - s[j])
+          ∨
+          (j mod 2 = 0 ∧ wp(S2, I))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L 0 ≤ j+1 ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j+1 ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L -1 ≤ j ≤ |s|-1 ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j+1 ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ (if i mod 2 = 1 then s[i] else 0 fi))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi) + (if j mod 2 = 1 then s[j] else 0 fi))
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi) + 0)
+
+        ≡ (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+          ∨
+          (j mod 2 = 0 ∧ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+
+        j mod 2 = 0 ∧ result = ∑ ... + if j mod 2 = 1 then s[j] else 0 fi
+        j mod 2 = 0 ∧ result = ∑ ... + 0
+        j mod 2 = 0 ∧ result = ∑ ...
+
+        ≡ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+
+    I ∧ B ⟹ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi))
+
+        0 ≤ j ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi) ∧ j < |s|
+            ≡ 0 ≤ j < |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+
+// I ∧ ¬B ⟹ Qc
+    0 ≤ j ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi) ∧ ¬(j < |s|)
+    ≡ 0 ≤ j ≤ |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi) ∧ j ≥ |s|
+    ≡ j = |s| ∧L result = ∑ ᵢ₌₀ ʲ⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+        ⟹ result = ∑ ᵢ₌₀ |ˢ|⁻¹ (if i mod 2 = 1 then s[i] else 0 fi)
+
+// {I ∧ B ∧ v0 = fv} S {fv < v0}
+    fv = |s| - j
+    I ∧ B ∧ v0 = fv ⟹ wp(S, fv < v0)
+    wp(S, fv < v0) ≡ wp(S1, wp(S2, fv < v0))
+
+    wp(S2, fv < v0)
+        ≡ wp(j := j + 1, fv < v0)
+        ≡ def(j+1) ∧L |s|-(j + 1) < v0
+        ≡ |s|-j-1 < v0
+
+    wp(S1, wp(S2, fv < v0))
+        ≡ wp(S1, |s|-j-1 < v0)
+
+        ≡ wp(
+            if (j mod 2 = 1) then result := result + s[j] else skip endif,
+            |s|-j-1 < v0
+        )
+
+        ≡ def(j mod 2 = 1) ∧L (
+            (j mod 2 = 1 ∧ wp(result := result + s[j], |s|-j-1 < v0))
+            ∨
+            (¬(j mod 2 = 1) ∧ wp(skip, |s|-j-1 < v0))
+        )
+
+        ≡ def(j mod 2 = 1) ∧L (
+            (j mod 2 = 1 ∧ def(result + s[j]) ∧L |s|-j-1 < v0)
+            ∨
+            (j mod 2 = 0 ∧ |s|-j-1 < v0)
+        )
+
+        ≡ def(j mod 2 = 1) ∧L (
+            (j mod 2 = 1 ∧ 0 ≤ j < |s| ∧L |s|-j-1 < v0)
+            ∨
+            (j mod 2 = 0 ∧ |s|-j-1 < v0)
+        )
+
+        ≡ (j mod 2 = 1 ∧ |s|-j-1 < v0) ∨ (j mod 2 = 0 ∧ |s|-j-1 < v0)
+        ≡ |s|-j-1 < v0 ∧ (j mod 2 = 1 ∨ j mod 2 = 0)
+        ≡ |s|-j-1 < v0 ∧ True
+        ≡ |s|-j-1 < v0
+
+    I ∧ B ∧ v0 = fv ⟹ wp(S, fv < v0)
+        ≡ I ∧ B ∧ v0 = fv ⟹ |s|-j-1 < v0
+
+        0 ≤ j ≤ |s| ∧L result = ... ∧ j < |s| ∧ v0 = fv
+        0 ≤ j < |s| ∧L result = ... ∧ v0 = |s|-j
+            ⟹ |s|-j-1 < v0 = |s|-j
+            ⟹ |s|-j-1 < |s|-j
+            ⟹ -1 < 0
+
+// I ∧ fv ≤ 0 ⟹ ¬B
+    0 ≤ j ≤ |s| ∧L result = ... ∧ fv ≤ 0
+        ≡ 0 ≤ j ≤ |s| ∧L result = ... ∧ |s| - j ≤ 0
+        ≡ 0 ≤ j ≤ |s| ∧L result = ... ∧ |s| ≤ j
+        ≡ j = |s| ∧L result = ...
+        ⟹ ¬B ≡ ¬(j < |s|) ≡ j ≥ |s|
+
+
+
+result := 0;
+j := 0;
+while (j < s.size()) do
+    if (j mod 2 = 1) then
+        result := result + s[j]
+    else
+        skip
+    endif; // S1
+    j := j + 1 // S2
+endwhile

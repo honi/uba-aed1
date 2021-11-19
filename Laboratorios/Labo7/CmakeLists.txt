@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.20)
+project(Labo7)
+
+set(CMAKE_CXX_STANDARD 17)
+set(SOURCE_FILES main.cpp cases.cpp ejercicios.cpp)
+
+add_subdirectory(lib/googletest-master/googletest)
+include_directories(lib/googletest-master/googletest/include)
+
+add_executable(Labo7 ${SOURCE_FILES})
+target_link_libraries(Labo7 gtest gtest_main)

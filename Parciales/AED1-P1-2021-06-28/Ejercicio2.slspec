@@ -21,6 +21,7 @@ pred genera(cadena: seq<seq<ℤ>>, is: seq<ℤ×ℤ>) {
 pred esIntercambio(viejo: seq<ℤ>, nuevo: seq<ℤ>, i: ℤ, j: ℤ) {
     0 ≤ i,j < |viejo|
     ∧L (nuevo[i] = viejo[j] ∧ nuevo[j] = viejo[i])
+    ∧ (∀k: ℤ)(0≤k<|viejo| ∧ k≠i ∧ k≠j ⟹L nuevo[k]=viejo[k])
 }
 
 
