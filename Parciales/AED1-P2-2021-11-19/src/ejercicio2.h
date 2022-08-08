@@ -1,6 +1,0 @@
-#ifndef AED_P2_2021_11_19_EJERCICIO2_H
-#define AED_P2_2021_11_19_EJERCICIO2_H
-
-void ejercicio2();
-
-#endif //AED_P2_2021_11_19_EJERCICIO2_H
