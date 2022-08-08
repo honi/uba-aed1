@@ -1,7 +1,7 @@
 # Algoritmos y Estructuras de Datos 1
 
-Carrera: Ciencias de la Computación - UBA\
-Cursada: 2do cuatrimestre 2021 (virtual)
+Ciencias de la Computación - FCEN - UBA\
+2do cuatrimestre 2021 (virtual)
 
 Este repositorio está incompleto porque no hice todas las prácticas / laboratorios, pero igual subo lo que tengo.
 
